@@ -4,8 +4,50 @@
   justify-content: space-between;
   margin: 0 auto;
   padding: 18px 70px;
-  background-color: var(--bg-green);
 }
+
+.header__login {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.header__nav-login {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.header__nav-link {
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.header__profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap:17px;
+  color: var(--white);
+  text-decoration: none;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.header__account-icon {
+  background-color: #313131;
+  border-radius: 4px;
+  padding: 8px 7px;
+}
+
 .header__nav_logout {
   display: flex;
   flex-direction: row;

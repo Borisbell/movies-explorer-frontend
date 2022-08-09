@@ -8,15 +8,15 @@ import Portfolio from '../Portfolio/Portfolio';
 
 function Main() {
   return (
-    <>
-      <Header />
+    <div className="main">
+      <Header loggedIn='false'/>
       <Promo />
       <AboutProject />
       <Techs />
       <AboutMe />
       <Portfolio />
       <Footer />
-    </>
+    </div>
   );
 }
 
