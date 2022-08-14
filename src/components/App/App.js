@@ -9,7 +9,6 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 function App() {
   return (
     <>
-      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="signin" element={<Login />} />

@@ -1,54 +1,82 @@
 .footer {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    padding: 79px 70px 20px;
-    background-color: var(--bg-dark-grey);
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 79px 70px 20px;
+  background-color: var(--bg-dark-grey);
 }
 
 .footer__header {
-    font-family: var(--font-family);
-    color: #8B8B8B;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 0;
-    padding-bottom: 20px;
+  font-family: var(--font-family);
+  color: #8B8B8B;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 0;
+  padding-bottom: 20px;
 }
 
 .footer__top-row {
-    display: flex;
-    justify-content: center;
-    border-bottom: solid 1px #424242;
+  display: flex;
+  justify-content: center;
+  border-bottom: solid 1px #424242;
 }
 
 .footer__bottom-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
 }
 
 .footer__year {
-    font-family: var(--font-family);
-    color: var(--white);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 0;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--white);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 0;
 }
 
 .footer__bottom-nav {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    font-family: var(--font-family);
-    color: var(--white);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 0;
-    list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-family: var(--font-family);
+  color: var(--white);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 0;
+  list-style: none;
+}
 
+@media screen and ( max-width: 600px ) {
+  .footer {
+      padding: 79px 10px 10px;
+  }
+  .footer__year {
+    color:#8B8B8B;
+    ;
+  }
+
+  .footer__bottom-nav {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    column-gap: 12px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .footer__bottom-row {
+      flex-direction: column-reverse;
+      gap: 12px;
+      align-items: center;
+  }
 }

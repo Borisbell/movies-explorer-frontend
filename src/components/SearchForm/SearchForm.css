@@ -40,6 +40,18 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 20px;
+  color: var(--white);
+  width: 100%;
+  margin-right: 24px;
+  padding: 4px;
+}
+
+.search-form__input:focus {
+  outline: 1px solid rgb(124, 124, 124);
+  border-radius: 8px;
+}
+
+.search-form__input::placeholder {
   color: #8B8B8B;
 }
 

@@ -4,7 +4,7 @@ function Switcher(props) {
   return (
     <div className="switcher__wrapper">
      <input type="checkbox" id="switcher" className="switcher__toggle"/>
-     <label for="switcher">Короткометражки</label>
+     <label htmlFor="switcher">Короткометражки</label>
     </div>
   );
 }

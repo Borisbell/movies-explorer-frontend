@@ -9,7 +9,7 @@ import Portfolio from '../Portfolio/Portfolio';
 function Main() {
   return (
     <div className="main">
-      <Header loggedIn='false'/>
+      <Header loggedIn={false}/>
       <Promo />
       <AboutProject />
       <Techs />

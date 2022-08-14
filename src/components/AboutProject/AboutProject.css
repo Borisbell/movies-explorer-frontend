@@ -1,79 +1,103 @@
 .about-project {
-    background-color: var(--bg-dark-grey);
-    padding: 110px 70px;
+  background-color: var(--bg-dark-grey);
+  padding: 110px 70px;
 }
 
 .about__content {
-    display: flex;
-    flex-direction: row;
-    margin: 70px 0 110px;
-    gap: 40px;
+  display: flex;
+  flex-direction: row;
+  margin: 70px 0 110px;
+  gap: 40px;
 }
 
 .about__content-column {
-    width: 50%;
+  width: 50%;
 }
 
 .about__content-header {
-    font-family: var(--font-family);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: -0.04em;
-    color: var(--white);
-    margin-bottom: 26px;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  margin-bottom: 26px;
 }
 
 .about__content-text {
-    font-family: var(--font-family);
-    width: 550px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--white);
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--white);
 }
 
 .about__timing {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 110px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 110px;
 }
 
 .about__timing-column-s {
-    width: 30%; 
+  width: 30%; 
 }
 
 .about__timing-column-l {
-    width: 70%; 
+  width: 70%; 
 }
 
 .about__timing-weeks {
-    margin: 0;
-    padding: 0;
-    background-color: #303030;
-    font-family: var(--font-family);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    text-align: center;
-    color: var(--white);
-    padding-top: 9px;
-    padding-bottom: 9px;
+  margin: 0;
+  padding: 0;
+  background-color: #303030;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: var(--white);
+  padding-top: 9px;
+  padding-bottom: 9px;
 }
 
 .about__timing-weeks_style_green {
-    background-color: var(--accent-color);
-    color: var(--black);
+  background-color: var(--accent-color);
+  color: var(--black);
 }
 
 .about__timing-subhead {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-family);
-    text-align: center;
-    color: #8B8B8B;
-    margin-top: 13px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  text-align: center;
+  color: #8B8B8B;
+  margin-top: 13px;
+}
+
+@media screen and ( max-width: 800px ) {
+  .about__content-text {
+      font-size: 12px;
+      line-height: 18px;
+  }
+}
+
+
+@media screen and ( max-width: 600px ) {
+  .about-project {
+    padding: 70px 18px;
+  }
+
+  .about__content {
+    display: flex;
+    flex-direction: column;
+    margin: 60px 0 60px;
+    gap: 56px;
+  }
+
+  .about__content-column {
+    width: 100%;
+  }
 }

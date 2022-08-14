@@ -44,7 +44,8 @@
   align-items: center;
   gap: 10px;
   list-style: none;
-  margin: 0;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .techs__list-item {
@@ -63,4 +64,36 @@
   border-radius: 10px;
   width: 90px;
   height: 60px;
+}
+
+@media screen and ( max-width: 800px ) {
+  .techs {
+    padding: 90px 50px;
+  }
+
+  .techs__subtext {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .techs__list-item{
+    font-size: 12px;
+    width: 84px;
+    height: 57px;
+  }
+
+  .techs__list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+@media screen and ( max-width: 600px ) {
+  .techs {
+    padding: 70px 18px;
+  }
+
+  .techs__subtext {
+    width: 100%;
+  }
 }

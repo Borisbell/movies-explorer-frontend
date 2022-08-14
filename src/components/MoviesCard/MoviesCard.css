@@ -1,3 +1,8 @@
+.movies-card {
+  position: relative;
+  cursor: pointer;
+}
+
 .movies-card__img {
   width: 100%;
   border-radius: 6px;
@@ -38,4 +43,23 @@
   align-items: center;
   text-align: center;
   padding: 3px 4px;
+}
+
+.movies-card__save {
+  position: absolute;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 9px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--white);
+  top:14px;
+  right: 14px;
+  border: none;
+  padding: 6px 7px;
+  background-color: #313131;
+  border-radius: 30px;
 }
