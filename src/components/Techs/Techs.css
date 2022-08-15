@@ -96,4 +96,8 @@
   .techs__subtext {
     width: 100%;
   }
+
+  .techs__list {
+    width: 178px
+  }
 }

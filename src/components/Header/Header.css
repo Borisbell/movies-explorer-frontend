@@ -6,6 +6,10 @@
   padding: 18px 70px;
 }
 
+.header__logo:hover {
+  opacity: 0.7;
+}
+
 .header__login {
   display: flex;
   flex-direction: row;
@@ -45,6 +49,10 @@
   text-decoration: none;
 }
 
+.header__nav-link:hover {
+  color: rgb(190, 190, 190);
+}
+
 .header__profile {
   display: flex;
   flex-direction: row;
@@ -57,6 +65,10 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
+}
+
+.header__profile:hover {
+  opacity: 0.7;
 }
 
 .header__account-icon {
@@ -86,6 +98,10 @@
   text-decoration: none;
 }
 
+.header__link:hover {
+  opacity: 0.7;
+}
+
 .header__button {
   background: var(--accent-color);
   border-radius: 3px;
@@ -98,6 +114,10 @@
   font-size: 12px;
   line-height: 16px;
   text-decoration: none;
+}
+
+.header__button:hover {
+  opacity: 0.7;
 }
 
 @media screen and ( max-width: 800px ) {

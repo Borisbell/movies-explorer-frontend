@@ -1,6 +1,8 @@
 .promo {
   background-color: var(--bg-green);
   padding: 50px 70px 60px;
+  display: flex;
+  flex-direction: column;
 }
 
 .promo__header {
@@ -17,10 +19,7 @@
 }
 
 .promo__bottom-row {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: flex-end;
+  align-self: flex-end;
 }
 
 @media screen and ( max-width: 800px ) {

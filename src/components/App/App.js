@@ -5,6 +5,7 @@ import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import PageNotFound from '../PageNotFound/PageNotFound';
 
 function App() {
   return (
@@ -13,9 +14,10 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="signin" element={<Login />} />
         <Route path="signup" element={<Register />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="profile" element={<Profile name='от варёных штиблет'/>} />
         <Route path="movies" element={<Movies />} />
         <Route path="saved-movies" element={<SavedMovies />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );

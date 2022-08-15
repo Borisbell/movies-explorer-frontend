@@ -18,3 +18,10 @@
   font-size: 24px;
   line-height: 29px;
 }
+
+@media screen and ( max-width: 600px ) {
+  .signup-header {
+    align-items: center;
+    width: 100%;
+  }
+}

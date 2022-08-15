@@ -1,12 +1,12 @@
 import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
 
-function Profile(props) {
+function Profile({name}) {
   return (
     <>
       <div className="profile">
         <Header loggedIn={true}/>
-        <h1 className="profile__header">Привет, {props.name}!</h1>
+        <h1 className="profile__header">Привет, {name}!</h1>
         <form
           // onSubmit={} 
           className="profile__form">
@@ -33,12 +33,14 @@ function Profile(props) {
                 placeholder="pochta@yandex.ru" 
                 required/>
           </fieldset>
-          <button type="submit" 
-                  className="profile__edit">
-                  Редактировать
-          </button>
+          <div className="profile__buttons">
+            <button type="submit" 
+                    className="profile__edit">
+                    Редактировать
+            </button>
+            <Link to="/signin" className="profile__logout">Выйти из аккаунта</Link>
+          </div>
         </form>
-          <Link to="/signup" className="register__signin-text register__signin-link">Выйти из аккаунта</Link>
       </div>
     </>
   );

@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import icon from '../../images/header/account-icon.svg';
 import close from '../../images/header/close.svg';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function MobileMenu({mobileMenuShown, handleBurgerClick}) {
+
+  let activeStyle = {
+    paddingBottom: '4px',
+    borderBottom: 'solid 2px white',
+  };
 
   return (
     <div className={mobileMenuShown ? "mobile-menu__bg-active" : "mobile-menu__bg"}>
@@ -16,13 +21,25 @@ function MobileMenu({mobileMenuShown, handleBurgerClick}) {
                />
           <ul className='mobile-menu__list'>
             <li className='mobile-menu__item'>
-              <Link to='/' className='mobile-menu__link'>Главная</Link>
+              <NavLink to='/' 
+                       className='mobile-menu__link'
+                       style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                       >Главная</NavLink>
             </li>
             <li className='mobile-menu__item'>
-              <Link to='/movies' className='mobile-menu__link'>Фильмы</Link>
+              <NavLink to='/movies' 
+                       className='mobile-menu__link'
+                       style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                       >Фильмы</NavLink>
             </li>
             <li className='mobile-menu__item'>
-              <Link to='/saved-movies' className='mobile-menu__link'>Сохраненные фильмы</Link>
+              <NavLink to='/saved-movies' 
+                       className='mobile-menu__link'
+                       style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                       >Сохраненные фильмы</NavLink>
             </li>
           </ul>
         </nav>

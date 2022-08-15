@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import logo from '../../images/header/logo.svg';
 import icon from '../../images/header/account-icon.svg';
 import burger from '../../images/header/burger.svg';
-import close from '../../images/header/close.svg';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import MobileMenu from '../MobileMenu/MobileMenu';
 
 function Header({loggedIn}) {
-  // const [loggedIn, setLoggedIn] = useState(false);
   const [mobileMenuShown, SetMobileMenuShown] = useState(false);
   
+  let activeStyle = {
+    paddingBottom: '4px',
+    borderBottom: 'solid 2px white',
+  };
+
   function handleBurgerClick() {
-    console.log('burger clicked in header')
     SetMobileMenuShown(!mobileMenuShown);
   }
 
@@ -30,13 +32,25 @@ function Header({loggedIn}) {
           <nav className="header__login">
             <ul className='header__nav-login'>
               <li className='header__nav-item'>
-                <Link to='/' className='header__nav-link'>Главная</Link>
+                <NavLink to='/' 
+                         className='header__nav-link'
+                         style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                          >Главная</NavLink>
               </li>
               <li className='header__nav-item'>
-                <Link to='/movies' className='header__nav-link'>Фильмы</Link>
+                <NavLink to='/movies' 
+                         className='header__nav-link'
+                         style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                          >Фильмы</NavLink>
               </li>
               <li className='header__nav-item'>
-                <Link to='/saved-movies' className='header__nav-link'>Сохраненные фильмы</Link>
+                <NavLink to='/saved-movies' 
+                         className='header__nav-link'
+                         style={({ isActive }) =>
+                          isActive ? activeStyle : undefined}
+                          >Сохраненные фильмы</NavLink>
               </li>
               <li className='header__nav-item'>
                 <Link to='/profile' className='header__profile'>

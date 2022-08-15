@@ -1,6 +1,7 @@
 .register {
   background-color: var(--bg-dark-grey);
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -90,4 +91,10 @@
 
 .register__signin-link:hover {
   color: #3456F3;
+}
+
+@media screen and ( max-width: 600px ) {
+  .register__form {
+    width: 90%;
+  }
 }

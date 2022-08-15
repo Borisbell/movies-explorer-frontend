@@ -28,7 +28,6 @@
   font-style: normal;
   font-weight: 400;
   font-size: 30px;
-  line-height: 0;
   letter-spacing: -0.04em;
   padding-bottom: 20px;
   border-bottom: 1px solid #424242;
@@ -51,6 +50,10 @@
   justify-content: space-between;
   color: var(--white);
   text-decoration: none;
+}
+
+.portfolio__list-link:hover {
+  opacity: 0.7
 }
 
 @media screen and ( max-width: 800px ) {

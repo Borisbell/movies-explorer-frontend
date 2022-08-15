@@ -11,9 +11,24 @@ function Footer() {
         <p className='footer__year'>@ 2022</p>
         <nav>
           <ul className='footer__bottom-nav'>
-            <li>Яндекс.Практикум</li>
-            <li>Github</li>
-            <li>Facebook</li>
+            <li>
+              <a href='https://practicum.yandex.ru/catalog/free/'
+                 className='footer__bottom-link'>
+                Яндекс.Практикум
+              </a>
+            </li>
+            <li>
+              <a href='https://github.com/Borisbell'
+                 className='footer__bottom-link'>
+                Github
+               </a>
+            </li>
+            <li>
+              <a href='https://www.facebook.com/boris.belov.37'
+                 className='footer__bottom-link'>
+                Facebook
+              </a>
+            </li>
           </ul>
         </nav>
       </div>

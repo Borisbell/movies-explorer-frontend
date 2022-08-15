@@ -62,4 +62,41 @@
   padding: 6px 7px;
   background-color: #313131;
   border-radius: 30px;
+  cursor: pointer;
+}
+
+.movies-card__saved {
+  position: absolute;
+  top:14px;
+  right: 14px;
+}
+
+@media screen and ( max-width: 800px ) {
+  .movies-card__title {
+    flex-wrap: nowrap;
+    width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media screen and ( max-width: 600px ) {
+  .movies-card__title {
+    flex-wrap: nowrap;
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media screen and ( max-width: 330px ) {
+  .movies-card__title {
+    flex-wrap: nowrap;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
