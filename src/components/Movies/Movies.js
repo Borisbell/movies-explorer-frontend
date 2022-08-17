@@ -8,8 +8,10 @@ function Movies() {
   return (
     <div className="movies">
       <Header loggedIn={true}/>
-      <SearchForm />
-      <MoviesCardList />
+      <main>
+        <SearchForm />
+        <MoviesCardList placeMovies={true}/>
+      </main>
       <Footer />
     </div>
   );

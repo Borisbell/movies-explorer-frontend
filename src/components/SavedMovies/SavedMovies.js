@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
@@ -8,8 +8,10 @@ function SavedMovies(props) {
   return (
     <div className='saved-movies'>
       <Header loggedIn={true}/>
-      <SearchForm />
-      <MoviesCardList />
+      <main>
+        <SearchForm />
+        <MoviesCardList placeMovies={false}/>
+      </main>
       <Footer />
     </div>
   );

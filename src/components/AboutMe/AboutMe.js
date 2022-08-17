@@ -15,11 +15,23 @@ function AboutMe() {
   и кот. Недавно начал кодить. После того, как прошёл курс по веб-разработке, остался на постоянной работе и теперь гадаю зачем я всем этим занимался.</p>
           </div>
           <ul className="about-me__links">
-              <li><a href="https://www.facebook.com/boris.belov.37/" className="about-me__link">Facebook</a></li>
-              <li><a href="https://github.com/Borisbell" className="about-me__link">Github</a></li>
-          </ul>
+              <li><a href="https://www.facebook.com/boris.belov.37/" 
+                     className="about-me__link"
+                     target="_blank"
+                     rel="noreferrer noopener">
+                     Facebook
+                  </a>
+              </li>
+              <li><a href="https://github.com/Borisbell" 
+                     className="about-me__link"
+                     target="_blank"
+                     rel="noreferrer noopener">
+                     Github
+                  </a>
+              </li>
+        </ul>
         </div>
-        <img className="about-me__image" src={me}/>
+        <img className="about-me__image" src={me} alt="Фотография симпатичного молодого человека"/>
       </div>
     </div>
   );

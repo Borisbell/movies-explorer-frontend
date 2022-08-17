@@ -44,7 +44,7 @@
   text-align: center;
   padding: 3px 4px;
 }
-
+/* 
 .movies-card__save {
   position: absolute;
   font-family: var(--font-family);
@@ -69,7 +69,7 @@
   position: absolute;
   top:14px;
   right: 14px;
-}
+} */
 
 @media screen and ( max-width: 800px ) {
   .movies-card__title {
