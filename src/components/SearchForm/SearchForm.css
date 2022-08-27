@@ -1,0 +1,132 @@
+.search-form__wrapper {
+  padding: 70px 70px 18px ;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: row;
+  padding: 16px 30px 16px 19px;
+  background-color: #2F2F2F;
+  border-radius: 9px;
+  margin-bottom: 69px;
+}
+
+.search-form__controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+
+.search-form__input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  flex-grow: 2;
+}
+
+.search-form__controls-separator {
+  width: 1px;
+  height: 40px;
+  background-color: #424242;
+}
+
+.search-form__input {
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  color: var(--white);
+  width: 100%;
+  margin-right: 24px;
+  padding: 4px;
+}
+
+.search-form__input:focus {
+  outline: 1px solid rgb(124, 124, 124);
+  border-radius: 8px;
+}
+
+.search-form__input::placeholder {
+  color: #8B8B8B;
+}
+
+.search-form__submit {
+  background-color: #4285F4;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  color: #FFFFFF;
+  padding: 8px 10px;
+  border-radius: 48px;
+  border: none;
+  cursor: pointer;
+}
+
+.search-form__submit:hover {
+  background-color: #5D78F5;
+}
+
+.search-form__switcher_view_mobile {
+  display: none;
+}
+
+.search-form__separator {
+  border: none;
+  border-top: 1px solid #424242;
+  margin-bottom: 10px;
+}
+
+@media screen and ( max-width: 800px ) {
+  .search-form__wrapper {
+    padding: 80px 30px 10px;
+  }
+
+  .search-form {
+    padding: 19px;
+    margin-bottom: 109px;
+  }
+}
+
+@media screen and ( max-width: 600px ) {
+  .search-form__switcher{
+    display: none;
+  }
+
+  .search-form__controls-separator {
+    display: none;
+  }
+
+  .search-form__switcher_view_mobile {
+    display: block;
+    margin-bottom: 44px;
+    align-self: center;
+  }
+
+  .search-form__wrapper {
+    padding: 80px 10px 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .search-form {
+    margin-bottom: 0;
+    margin-bottom: 44px;
+  }
+
+  .search-form__icon {
+    display: none;
+  }
+
+  .search-form__separator {
+    width: 100%;
+  }
+}

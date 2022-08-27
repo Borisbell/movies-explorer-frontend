@@ -1,0 +1,4 @@
+.movies {
+  background-color: var( --bg-dark-grey);
+  min-height: 100vh;
+}

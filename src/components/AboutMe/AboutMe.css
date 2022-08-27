@@ -1,0 +1,141 @@
+.about-me {
+  background-color: var(--bg-dark-grey);
+  padding: 110px 70px 125px
+}
+
+.about-me__wrapper {
+  padding-top: 66px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 49px;
+}
+
+.about-me__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-me__header {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 18px;
+  font-family: var(--font-family);
+  color: var(--white);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+}
+
+.about-me__subheader {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 26px;
+  font-family: var(--font-family);
+  color: var(--white);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.about-me__bio {
+  font-family: var(--font-family);
+  color: var(--white);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  max-width: 600px;
+}
+
+.about-me__image {
+  width: 270px;
+  height: 327px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.about-me__links {
+  margin: 0;
+  padding:0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-family: var(--font-family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.about-me__link {
+  text-decoration: none;
+  color: var(--white);
+}
+
+.about-me__link:hover {
+  opacity: 0.7
+}
+
+@media screen and ( max-width: 800px ) {
+  .about-me {
+    padding: 68px 50px 90px
+  }
+
+  .about-me__image {
+    width: 255px;
+    height: 307px;
+  }
+
+  .about-me__header {
+    font-size: 40px;
+    line-height: 40px;  
+  }
+  
+  .about-me__subheader {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .about-me__bio {
+    font-size: 12px;
+    line-height: 18px;  
+  }
+}
+
+@media screen and ( max-width: 600px ) {
+  .about-me {
+    padding: 70px 18px;
+  }
+
+  .about-me__image {
+    width: 100%;
+  }
+
+  .about-me__wrapper {
+    padding-top: 66px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 40px;
+  }
+
+  .about-me__header {
+    font-size: 30px;
+    line-height: 36px;  
+  }
+  
+  .about-me__subheader {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  
+  .about-me__bio {
+    font-size: 11px;
+    line-height: 16px;  
+  }
+}
