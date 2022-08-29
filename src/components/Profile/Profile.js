@@ -1,37 +1,69 @@
+import React, {useState } from "react";
 import Header from '../Header/Header';
-import { Link } from 'react-router-dom';
+import * as api from '../../utils/MainApi';
 
-function Profile({name}) {
+function Profile({signOut, userData}) {
+  const token = localStorage.getItem('jwt');
+  const [currentUser, setCurrentUser] = React.useState({name: userData.name, email: userData.email});
+  const [formParams, setFormParams] = useState({
+    name: '',
+    email: ''
+  });
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setFormParams((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+
+  const handleUpdateUser = (email, name,) => {
+    api.editProfile(email, name, token)
+      .then(res => {
+        console.log('editProfile res - ',res.data);
+        setCurrentUser(res.data);
+      })
+      .catch(err => {
+        console.log('Ошибка: ', err)
+      })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleUpdateUser({formParams})
+  }
+
   return (
     <>
       <div className="profile">
         <Header loggedIn={true}/>
         <main>
-          <h1 className="profile__header">Привет, {name}!</h1>
+          <h1 className="profile__header">Привет, {currentUser.name}!</h1>
           <form
-            // onSubmit={} 
+            onSubmit={handleSubmit}
             className="profile__form">
             <fieldset className="profile__fieldset">
-              <label htmlFor="email" className="profile__form-label">E-mail</label>
-              <input id="email" 
-                    name="email" 
-                    type="email" 
-                    //  value={} 
-                    //  onChange={} 
+              <label htmlFor="name" className="profile__form-label">Имя</label>
+              <input id="name" 
+                    name="name" 
+                    type="name" 
+                    value={formParams.name} 
+                    onChange={handleChange} 
                     className="profile__form-input"
-                    placeholder="Email"    
+                    placeholder={currentUser.name}   
                     required
                     />
             </fieldset>
             <fieldset className="profile__fieldset">
-              <label htmlFor="email" className="profile__form-label">Пароль</label>       
+              <label htmlFor="email" className="profile__form-label">Email</label>       
               <input id="email"  
                   name="email" 
                   type="email" 
-                  // value={} 
-                  // onChange={}
+                  value={formParams.email} 
+                  onChange={handleChange} 
                   className="profile__form-input"
-                  placeholder="pochta@yandex.ru" 
+                  placeholder={currentUser.email}
                   required/>
             </fieldset>
             <div className="profile__buttons">
@@ -39,7 +71,10 @@ function Profile({name}) {
                       className="profile__edit">
                       Редактировать
               </button>
-              <Link to="/signin" className="profile__logout">Выйти из аккаунта</Link>
+              <button className="profile__logout"
+                      onClick={signOut}>
+                      Выйти из аккаунта
+              </button>
             </div>
           </form>
         </main>
