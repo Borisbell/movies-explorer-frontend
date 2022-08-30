@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Switcher from '../Switcher/Switcher';
 import search from '../../images/search/search.svg';
 
-function SearchForm({handleSearch, handleSearchData}) {
+function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesChange}) {
   const desktopSwitcher = document.querySelector('.search-form__switcher');
   if(window.innerWidth < 601) {
     desktopSwitcher.remove();
@@ -34,7 +34,7 @@ function SearchForm({handleSearch, handleSearchData}) {
           </button>
           <div className="search-form__controls-separator"></div>
         <div className="search-form__switcher">
-          <Switcher />
+          <Switcher isShort={isShort} handleShortMoviesChange={handleShortMoviesChange}/>
         </div>
         </div>
       </form>
