@@ -9,12 +9,14 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as api from '../../utils/MainApi';
-import {getMovies} from '../../utils/MoviesApi';
+import { getBeatFilmMovies } from '../../utils/MoviesApi';
+import { addMovie, getMyMovies} from '../../utils/MainApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState({});
   const [moviesDB, setMoviesDB] = useState([]);
+  const [savedMoviesDB, setSavedMoviesDB] = useState([]);
   const navigate = useNavigate();
 
   const handleLogin = ({ email, password }) => {
@@ -54,16 +56,46 @@ function App() {
     setUserData(null);
     navigate('/signin');
     }
-  
+
+  const handleSavedMovie = (card, token) => {
+    console.log('Clicked save', card)
+
+    const tempCard = {...card, image: "https://api.nomoreparties.co" + card.image.url, thumbnail: "https://api.nomoreparties.co" + card.image.formats.thumbnail.url, movieId:card.id};
+    const { created_at, id, updated_at, ...newCard } = tempCard;
+    console.log(newCard);
+    console.log("image type of: ",typeof newCard.image);
+
+    addMovie(card, token)
+    .then(newMovie => {
+      console.log('Add movie res: ', newMovie)
+      setSavedMoviesDB([newMovie, ...savedMoviesDB]);
+    })
+    .catch(err => {
+      console.log('Ошибка: ', err)
+    })
+    }  
+
   useEffect(() => {
-    getMovies()
+    getBeatFilmMovies()
       .then((data) => {
         setMoviesDB(data);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       })
-    },[])  
+    },[]);
+
+  const token = localStorage.getItem('jwt');
+
+  useEffect(() => {
+    getMyMovies(token)
+    .then((movies) => {
+      setSavedMoviesDB(movies);
+    })
+    .catch(err => {
+      console.log('Ошибка: ', err)
+    })
+  },[])   
 
   useEffect(() => {
     tokenCheck();
@@ -88,8 +120,15 @@ function App() {
                    signOut={signOut}
                    userData={userData}/>
         } />
-        <Route path="movies" element={<Movies moviesDB={moviesDB}/>} />
-        <Route path="saved-movies" element={<SavedMovies />} />
+        <Route path="movies" element={<Movies 
+                                        moviesDB={moviesDB}
+                                        savedMoviesDB={savedMoviesDB}
+                                        handleSavedMovie={handleSavedMovie}    
+                                        />} />
+        <Route path="saved-movies" element={<SavedMovies 
+                                              savedMoviesDB={savedMoviesDB}
+                                              setSavedMoviesDB={setSavedMoviesDB}  
+                                              />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </CurrentUserContext.Provider>

@@ -12,7 +12,7 @@ function getResponseData(res) {
   }
 }
 
-export function getMovies() {
+export function getBeatFilmMovies() {
   return fetch(baseURL, {
     method: 'GET'
   })

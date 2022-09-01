@@ -4,13 +4,17 @@ import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function SavedMovies(props) {
+function SavedMovies({savedMoviesDB}) {
+  console.log(savedMoviesDB);
   return (
     <div className='saved-movies'>
       <Header loggedIn={true}/>
       <main>
         <SearchForm />
-        <MoviesCardList placeMovies={false}/>
+        {savedMoviesDB ?
+        <MoviesCardList cards={savedMoviesDB}
+                        placeMovies={false}/>
+        : ''}
       </main>
       <Footer />
     </div>

@@ -1,7 +1,20 @@
 import React from 'react';
 import SaveButton from '../SaveButton/SaveButton';
 
-function MoviesCard({img, imgAlt, nameRU, duration, isSaved, placeMovies}) {
+function MoviesCard({card,
+                     img, 
+                     imgAlt,
+                     nameRU,
+                     duration,
+                     isSaved,
+                     placeMovies,
+                     handleSavedMovie}) {
+
+  const token = localStorage.getItem('jwt');
+
+  function handleClick() {
+    handleSavedMovie(card, token);
+  }                      
   return (
     <div className="movies-card">
       <img src={img} 
@@ -12,7 +25,10 @@ function MoviesCard({img, imgAlt, nameRU, duration, isSaved, placeMovies}) {
         <p className="movies-card__duration">{duration}</p>
       </div>
       {
-      placeMovies && <SaveButton isSaved={isSaved}/>
+      placeMovies && <SaveButton 
+                      isSaved={isSaved}
+                      handleClick={handleClick}  
+                      />
       }
     </div>
   );

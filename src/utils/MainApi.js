@@ -7,6 +7,7 @@ const checkResponse = (res) => {
 
   return res.json()
       .then((data) => {
+        console.log(data);
         throw new Error(data.error);
       });
 };
@@ -58,7 +59,52 @@ export const getContent = (token) => {
       'Authorization': `Bearer ${token}`,
     }
   })
-  .then(checkResponse)
+  .then(res => checkResponse(res))
 }
 
+export function addMovie({
+  country, 
+  director, 
+  duration, 
+  year, 
+  description, 
+  image, 
+  trailerLink, 
+  nameRU, 
+  nameEN, 
+  thumbnail, 
+  movieId
+  }, token){
+    return fetch(`${BASE_URL}/movies`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        country, 
+        director, 
+        duration, 
+        year, 
+        description, 
+        image, 
+        trailerLink, 
+        nameRU, 
+        nameEN, 
+        thumbnail, 
+        movieId
+      })
+    })
+    .then(res => checkResponse(res))
+}
+
+export function getMyMovies(token){
+  return fetch(`${BASE_URL}/movies`, {
+    headers: { 
+      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json", 
+    }
+  })
+  .then(res => checkResponse(res))
+}
 

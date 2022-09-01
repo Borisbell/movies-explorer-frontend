@@ -4,13 +4,13 @@ import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function Movies({moviesDB}) {
+function Movies({moviesDB, handleSavedMovie}) {
   const [cards, setCards] = useState([]);
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
+  const [isSearchMade, setIsSearchMade] = useState(false);
 
   function handleSearch(event) {
-    console.log(event.target.value);
     setSearchQue(event.target.value);
   }
 
@@ -24,12 +24,11 @@ function Movies({moviesDB}) {
 
   function handleSearchData(event) {
     event.preventDefault();
-    console.log('filtered movies', moviesDB.filter(filterMovies))
     let searchResult = moviesDB.filter(filterMovies);
     if(isShort){
-      console.log('short movies', searchResult.filter(shortMovies));
       searchResult = searchResult.filter(shortMovies);
     }
+    setIsSearchMade(true);
     setCards(searchResult);
   }
 
@@ -50,7 +49,13 @@ function Movies({moviesDB}) {
                     isShort={isShort} 
                     handleShortMoviesChange={handleShortMoviesChange} 
                     />
-        <MoviesCardList placeMovies={true} cards={cards}/>
+        {isSearchMade 
+          ? 
+          <MoviesCardList placeMovies={true} 
+                          cards={cards}
+                          handleSavedMovie={handleSavedMovie}  
+          />
+          : ''}
       </main>
       <Footer />
     </div>
