@@ -56,16 +56,22 @@ function App() {
     setUserData(null);
     navigate('/signin');
     }
+  
+  const token = localStorage.getItem('jwt');
 
   const handleSavedMovie = (card, token) => {
     console.log('Clicked save', card)
 
-    const tempCard = {...card, image: "https://api.nomoreparties.co" + card.image.url, thumbnail: "https://api.nomoreparties.co" + card.image.formats.thumbnail.url, movieId:card.id};
+    const tempCard = {...card, 
+                      image:`https://api.nomoreparties.co${card.image.url}`,
+                      thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
+                      movieId:card.id
+                    };
     const { created_at, id, updated_at, ...newCard } = tempCard;
     console.log(newCard);
     console.log("image type of: ",typeof newCard.image);
 
-    addMovie(card, token)
+    addMovie(newCard, token)
     .then(newMovie => {
       console.log('Add movie res: ', newMovie)
       setSavedMoviesDB([newMovie, ...savedMoviesDB]);
@@ -84,8 +90,6 @@ function App() {
         console.log('Ошибка: ', err)
       })
     },[]);
-
-  const token = localStorage.getItem('jwt');
 
   useEffect(() => {
     getMyMovies(token)

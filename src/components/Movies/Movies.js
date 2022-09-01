@@ -37,7 +37,10 @@ function Movies({moviesDB, handleSavedMovie}) {
   };
 
   useEffect(() => {
-    setCards(moviesDB);
+    const bffMovies = moviesDB.map(
+      (movie) => ({...movie, image:`https://api.nomoreparties.co/.${movie.image.url}`})
+    )
+    setCards(bffMovies);
   }, []);
 
   return (

@@ -1,15 +1,16 @@
-import React from 'react';
+import React,  {useEffect} from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList({placeMovies, 
                          cards,
                          handleSavedMovie}) {
+
   return (
     <div className='movies-card-list'>
       {cards.map((card) => (
         <MoviesCard key={card.id}
                     card={card}
-                    img={`https://api.nomoreparties.co/.${card.image.url}`}
+                    img={card.image}
                     nameRU={card.nameRU}
                     imgAlt={card.image.alternativeText} 
                     duration={card.duration}
