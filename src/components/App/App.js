@@ -10,7 +10,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as api from '../../utils/MainApi';
 import { getBeatFilmMovies } from '../../utils/MoviesApi';
-import { addMovie, getMyMovies} from '../../utils/MainApi';
+import { addMovie, deleteMovie, getMyMovies} from '../../utils/MainApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -42,6 +42,7 @@ function App() {
       api.getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
+          console.log('userData: ', res);
           setUserData(res);
         })
         .then(() => {
@@ -60,26 +61,34 @@ function App() {
   const token = localStorage.getItem('jwt');
 
   const handleSavedMovie = (card, token) => {
-    console.log('Clicked save', card)
 
-    const tempCard = {...card, 
-                      image:`https://api.nomoreparties.co${card.image.url}`,
-                      thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
-                      movieId:card.id
-                    };
-    const { created_at, id, updated_at, ...newCard } = tempCard;
-    console.log(newCard);
-    console.log("image type of: ",typeof newCard.image);
+    console.log('Clicked save', card);
+
+    const { created_at, id, updated_at, ...newCard } = card;
+    newCard.owner = userData._id;
+    console.log('Edited card ', newCard)
 
     addMovie(newCard, token)
     .then(newMovie => {
-      console.log('Add movie res: ', newMovie)
+      newMovie.isSaved = true;
       setSavedMoviesDB([newMovie, ...savedMoviesDB]);
     })
     .catch(err => {
       console.log('Ошибка: ', err)
     })
-    }  
+  }  
+
+  const handleDeleteMovie = (card, token) => {
+    console.log('Clicked delete', card);
+
+    deleteMovie(card._id, token)
+      .then(deletedMovie => {
+        console.log(deletedMovie)
+      })
+      .catch(err => {
+        console.log('Ошибка: ', err)
+      })
+  }
 
   useEffect(() => {
     getBeatFilmMovies()
@@ -130,8 +139,10 @@ function App() {
                                         handleSavedMovie={handleSavedMovie}    
                                         />} />
         <Route path="saved-movies" element={<SavedMovies 
+                                              userData={userData}
                                               savedMoviesDB={savedMoviesDB}
-                                              setSavedMoviesDB={setSavedMoviesDB}  
+                                              setSavedMoviesDB={setSavedMoviesDB} 
+                                              handleDeleteMovie={handleDeleteMovie} 
                                               />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

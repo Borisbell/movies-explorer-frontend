@@ -1,7 +1,7 @@
 import React from 'react';
 import saved from '../../images/card/saved.svg';
 
-function SaveButton({isSaved, handleClick}) {
+function SaveButton({isSaved, handleSave}) {
   return (
     <>
       { isSaved ?
@@ -9,7 +9,7 @@ function SaveButton({isSaved, handleClick}) {
            className="saved-badge"/>
       :
       <button className="save-button"
-              onClick={handleClick}
+              onClick={handleSave}
         >Сохранить</button>
       }
     </>

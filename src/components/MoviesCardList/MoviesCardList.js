@@ -1,9 +1,10 @@
-import React,  {useEffect} from 'react';
+import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList({placeMovies, 
                          cards,
-                         handleSavedMovie}) {
+                         handleSavedMovie,
+                         handleDeleteMovie}) {
 
   return (
     <div className='movies-card-list'>
@@ -17,6 +18,7 @@ function MoviesCardList({placeMovies,
                     isSaved={false} 
                     placeMovies={placeMovies} 
                     handleSavedMovie={handleSavedMovie}
+                    handleDeleteMovie={handleDeleteMovie}
                     />
           ))}
       <button className='movies-card-list__load-more'>Ещё</button>

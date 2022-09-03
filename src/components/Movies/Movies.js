@@ -4,11 +4,18 @@ import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function Movies({moviesDB, handleSavedMovie}) {
+function Movies({moviesDB, savedMoviesDB, handleSavedMovie}) {
   const [cards, setCards] = useState([]);
+  const [arrayForView, setArrayForView] = useState([])
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
   const [isSearchMade, setIsSearchMade] = useState(false);
+
+  // function createArrayForView(moviesDB, savedMoviesDB){
+  //   setArrayForView(moviesDB.forEach((movie) => savedMoviesDB.some( 
+  //     savedMovie => savedMovie.id === movie.id)
+  //     )) 
+  // }
 
   function handleSearch(event) {
     setSearchQue(event.target.value);
@@ -24,7 +31,10 @@ function Movies({moviesDB, handleSavedMovie}) {
 
   function handleSearchData(event) {
     event.preventDefault();
-    let searchResult = moviesDB.filter(filterMovies);
+
+    console.log(cards);
+    
+    let searchResult = cards.filter(filterMovies);
     if(isShort){
       searchResult = searchResult.filter(shortMovies);
     }
@@ -38,8 +48,14 @@ function Movies({moviesDB, handleSavedMovie}) {
 
   useEffect(() => {
     const bffMovies = moviesDB.map(
-      (movie) => ({...movie, image:`https://api.nomoreparties.co/.${movie.image.url}`})
+      (movie) => ({...movie,
+                      thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`, 
+                      image:`https://api.nomoreparties.co/.${movie.image.url}`,
+                      movieId: movie.id 
+                  }
+                )
     )
+    console.log('bffMovies: ', bffMovies);
     setCards(bffMovies);
   }, []);
 
@@ -52,8 +68,7 @@ function Movies({moviesDB, handleSavedMovie}) {
                     isShort={isShort} 
                     handleShortMoviesChange={handleShortMoviesChange} 
                     />
-        {isSearchMade 
-          ? 
+        {isSearchMade ? 
           <MoviesCardList placeMovies={true} 
                           cards={cards}
                           handleSavedMovie={handleSavedMovie}  

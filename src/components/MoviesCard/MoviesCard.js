@@ -1,5 +1,6 @@
 import React from 'react';
 import SaveButton from '../SaveButton/SaveButton';
+import DeleteButton from '../DeleteButton/DeleteButton';
 
 function MoviesCard({card,
                      img, 
@@ -8,13 +9,19 @@ function MoviesCard({card,
                      duration,
                      isSaved,
                      placeMovies,
-                     handleSavedMovie}) {
+                     handleSavedMovie,
+                     handleDeleteMovie}) {
 
   const token = localStorage.getItem('jwt');
 
-  function handleClick() {
+  function handleSave() {
     handleSavedMovie(card, token);
-  }                      
+  }        
+  
+  function handleDelete() {
+    handleDeleteMovie(card, token);
+  } 
+
   return (
     <div className="movies-card">
       <img src={img} 
@@ -25,10 +32,11 @@ function MoviesCard({card,
         <p className="movies-card__duration">{duration}</p>
       </div>
       {
-      placeMovies && <SaveButton 
+      placeMovies ? <SaveButton 
                       isSaved={isSaved}
-                      handleClick={handleClick}  
+                      handleSave={handleSave}  
                       />
+                  : <DeleteButton handleDelete = {handleDelete}/>
       }
     </div>
   );

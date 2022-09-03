@@ -108,3 +108,14 @@ export function getMyMovies(token){
   .then(res => checkResponse(res))
 }
 
+export function deleteMovie(id, token){
+  return fetch(`${BASE_URL}/movies/${id}`, {
+    method: 'DELETE',
+    headers: { 
+      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json", 
+    },
+  })
+  .then(res => checkResponse(res))
+}
+
