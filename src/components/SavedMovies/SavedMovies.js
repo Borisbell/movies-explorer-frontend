@@ -3,14 +3,30 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
-import { getMyMovies} from '../../utils/MainApi';
+import { getMyMovies, deleteMovie } from '../../utils/MainApi';
 
-function SavedMovies({userData, handleDeleteMovie}) {
+function SavedMovies({userData}) {
   const [moviesFromServer, setMoviesFromServer] = useState([]);
   const token = localStorage.getItem('jwt');
 
   function filterMyMovies(value) {
     return value.owner === userData._id
+  }
+
+  const handleDeleteMovie = (card, token) => {
+    console.log('Clicked delete', card);
+
+    deleteMovie(card._id, token)
+      .then(deletedMovie => {
+        console.log('deletedMovie', deletedMovie)
+        console.log(moviesFromServer)
+        setMoviesFromServer(moviesFromServer.filter(
+          (movie) => movie._id !== deletedMovie._id
+        ))
+      })
+      .catch(err => {
+        console.log('Ошибка: ', err)
+      })
   }
 
   useEffect(() => {
@@ -24,7 +40,7 @@ function SavedMovies({userData, handleDeleteMovie}) {
     .catch(err => {
       console.log('Ошибка: ', err)
     })
-  },[])  
+  },[]);
 
   return (
     <div className='saved-movies'>
