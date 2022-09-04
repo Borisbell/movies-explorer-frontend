@@ -10,15 +10,16 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as api from '../../utils/MainApi';
 import { getBeatFilmMovies } from '../../utils/MoviesApi';
-import { addMovie, deleteMovie, getMyMovies} from '../../utils/MainApi';
+import { addMovie, getMyMovies } from '../../utils/MainApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState({});
   const [moviesDB, setMoviesDB] = useState([]);
-  const [savedMoviesDB, setSavedMoviesDB] = useState([]);
+  const [moviesFromMyServer, setMoviesFromMyServer] = useState([]);
   const navigate = useNavigate();
 
+  
   const handleLogin = ({ email, password }) => {
     return api.authorize(email, password)
       .then((data) => {
@@ -32,7 +33,7 @@ function App() {
   const handleRegister = ({name, email, password }) => {
     return api.register(name, email, password)
     .then(() => {
-      setTimeout(() => {navigate('/signin')}, 3000)
+      handleLogin({ email, password })
     });
   }
 
@@ -42,7 +43,6 @@ function App() {
       api.getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
-          console.log('userData: ', res);
           setUserData(res);
         })
         .then(() => {
@@ -57,62 +57,62 @@ function App() {
     setUserData(null);
     navigate('/signin');
     }
-  
+
   const token = localStorage.getItem('jwt');
 
   const handleSavedMovie = (card, token) => {
 
-    console.log('Clicked save', card);
+    console.log('Clicked save: ', card);
+    console.log('Saving user token: ', token);
 
     const { created_at, id, updated_at, ...newCard } = card;
     newCard.owner = userData._id;
     console.log('Edited card ', newCard)
 
     addMovie(newCard, token)
-    .then(newMovie => {
-      newMovie.isSaved = true;
-      setSavedMoviesDB([newMovie, ...savedMoviesDB]);
-    })
-    .catch(err => {
-      console.log('Ошибка: ', err)
-    })
-  }  
-
-  const handleDeleteMovie = (card, token) => {
-    console.log('Clicked delete', card);
-
-    deleteMovie(card._id, token)
-      .then(deletedMovie => {
-        console.log(deletedMovie)
+      .then(newMovie => {
+        newMovie.isSaved = true;
+        setMoviesFromMyServer([newMovie, ...moviesFromMyServer]);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       })
+  }  
+
+  function filterMyMovies(value) {
+    return value.owner === userData._id
   }
 
   useEffect(() => {
-    getBeatFilmMovies()
-      .then((data) => {
-        setMoviesDB(data);
-      })
-      .catch(err => {
-        console.log('Ошибка: ', err)
-      })
-    },[]);
+    Promise.all([tokenCheck(), getMyMovies(token), getBeatFilmMovies()])
+    .then(([userData, myMovies, beatMovies]) => {
+      console.log('myMovies', myMovies);
+      console.log('beatMovies', beatMovies);
+      console.log('userData ', userData);
 
-  useEffect(() => {
-    getMyMovies(token)
-    .then((movies) => {
-      setSavedMoviesDB(movies);
+      setMoviesFromMyServer(myMovies.filter(filterMyMovies));
+      console.log('moviesFromMyServer: ', moviesFromMyServer);
+
+      const updatedArray = beatMovies.map(
+        (movie) => ({
+          ...movie,
+          thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`, 
+          image:`https://api.nomoreparties.co/.${movie.image.url}`,
+          movieId: movie.id, 
+          isSaved: moviesFromMyServer.some(item => item.movieId === movie.id)
+        })
+      )
+      console.log('updatedArray: ', updatedArray);
+      setMoviesDB(updatedArray);
     })
+    .finally(() => {
+
+      })
     .catch(err => {
       console.log('Ошибка: ', err)
-    })
-  },[])   
+    });
+  },[]);
 
-  useEffect(() => {
-    tokenCheck();
-  }, []);
 
   return (
     <CurrentUserContext.Provider value={userData}>
@@ -123,7 +123,6 @@ function App() {
             handleLogin={handleLogin} 
             tokenCheck={tokenCheck} 
             loggedIn={loggedIn}
-            setMoviesDB={setMoviesDB}
           />} />
         <Route path="signup" element={<Register 
           handleRegister={handleRegister}/>} 
@@ -135,14 +134,10 @@ function App() {
         } />
         <Route path="movies" element={<Movies 
                                         moviesDB={moviesDB}
-                                        savedMoviesDB={savedMoviesDB}
                                         handleSavedMovie={handleSavedMovie}    
                                         />} />
         <Route path="saved-movies" element={<SavedMovies 
                                               userData={userData}
-                                              savedMoviesDB={savedMoviesDB}
-                                              setSavedMoviesDB={setSavedMoviesDB} 
-                                              handleDeleteMovie={handleDeleteMovie} 
                                               />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -4,12 +4,7 @@ const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-
-  return res.json()
-      .then((data) => {
-        console.log(data);
-        throw new Error(data.error);
-      });
+  return Promise.reject(`Ошибка ${res.status}`);
 };
 
 export const register = (name, email, password) => {

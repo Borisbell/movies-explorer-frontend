@@ -9,13 +9,13 @@ function MoviesCardList({placeMovies,
   return (
     <div className='movies-card-list'>
       {cards.map((card) => (
-        <MoviesCard key={card.id}
+        <MoviesCard key={card.movieId}
                     card={card}
                     img={card.image}
                     nameRU={card.nameRU}
                     imgAlt={card.image.alternativeText} 
                     duration={card.duration}
-                    isSaved={false} 
+                    isSaved={card.isSaved} 
                     placeMovies={placeMovies} 
                     handleSavedMovie={handleSavedMovie}
                     handleDeleteMovie={handleDeleteMovie}
