@@ -14,6 +14,15 @@ function MoviesCard({card,
 
   const token = localStorage.getItem('jwt');
 
+  function toHoursAndMinutes(duration) {
+    const minutes = duration % 60;
+    const hours = Math.floor(duration / 60);
+  
+    return `${hours}ч ${minutes}м`;
+  }
+
+  const durationInHours = toHoursAndMinutes(duration)
+
   function handleSave() {
     handleSavedMovie(card, token);
   }        
@@ -29,7 +38,7 @@ function MoviesCard({card,
            className="movies-card__img"/>
       <div className="movies-card__description">
         <p className="movies-card__title">{nameRU} </p>
-        <p className="movies-card__duration">{duration}</p>
+        <p className="movies-card__duration">{durationInHours}</p>
       </div>
       {
       placeMovies ? <SaveButton 

@@ -80,7 +80,6 @@ function App() {
       .then(newMovie => {
         newMovie.isSaved = true;
         setMoviesFromMyServer([newMovie, ...moviesFromMyServer]);
-
         console.log('moviesFromMyServer: ', moviesFromMyServer)
       })
       .catch(err => {
