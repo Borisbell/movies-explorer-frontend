@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function Movies({moviesDB, handleSavedMovie}) {
-  const [cards, setCards] = useState(moviesDB);
+function Movies({moviesDB, handleSavedMovie, loggedIn}) {
+  const [cards, setCards] = useState([]);
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
-  const [isSearchMade, setIsSearchMade] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSearch(event) {
     setSearchQue(event.target.value);
@@ -23,13 +24,13 @@ function Movies({moviesDB, handleSavedMovie}) {
   }
 
   function handleSearchData(event) {
+    setIsLoading(true);
     event.preventDefault();
-    
     let searchResult = moviesDB.filter(filterMovies);
     if(isShort){
       searchResult = searchResult.filter(shortMovies);
     }
-    setIsSearchMade(true);
+    setIsLoading(false);
     setCards(searchResult);
   }
 
@@ -39,19 +40,21 @@ function Movies({moviesDB, handleSavedMovie}) {
 
   return (
     <div className="movies">
-      <Header loggedIn={true}/>
+      <Header loggedIn={loggedIn}/>
       <main>
         <SearchForm handleSearch={handleSearch}
                     handleSearchData={handleSearchData}
                     isShort={isShort} 
                     handleShortMoviesChange={handleShortMoviesChange} 
                     />
-        {isSearchMade ? 
+        {isLoading ? 
+          <Preloader />
+          :
           <MoviesCardList placeMovies={true} 
                           cards={cards}
                           handleSavedMovie={handleSavedMovie}  
           />
-          : ''}
+        }
       </main>
       <Footer />
     </div>

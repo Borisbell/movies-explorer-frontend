@@ -1,36 +1,30 @@
 import React, { useState } from 'react';
 import SignupHeader from '../SignupHeader/SignupHeader';
 import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 function Login({handleLogin}) {
-  const [formParams, setFormParams] = useState({
-    email: '',
-    password: '',
-  });
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit
+  } = useForm({
+    mode: "onChange"
+  })
+
+  const [message, setMessage] = useState('');
   const [signupSuccess, setSignupSuccess] = useState(true);
-  // const [isToolTipOpen, setIsToolTipOpen] = useState(false);
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormParams((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+  const onSubmit = ({ email, password}) => {
+    handleLogin(email, password)
+      .then(() => { 
+        setSignupSuccess(true);
+      })
+      .catch(err => {
+        setSignupSuccess(false);
+        setMessage(JSON.stringify(err.message));
+      })
   }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let { email, password} = formParams;
-    handleLogin({ email, password })
-    .catch(err => {
-      setSignupSuccess(false);
-      // setIsToolTipOpen(true);
-    })
-  }
-
-  // const handleCloseToolTip = () => {
-  //   setIsToolTipOpen(false)
-  // }
 
   return (
     <>
@@ -38,31 +32,50 @@ function Login({handleLogin}) {
         <SignupHeader text="Рады видеть!"/>
         <main>
           <form
-            onSubmit={handleSubmit}
+           onSubmit={handleSubmit(onSubmit)}
             className="register__form">
             <label htmlFor="email" className="register__form-label">E-mail</label>
             <input id="email" 
                   name="email" 
-                  type="email" 
-                  value={formParams.email} 
-                  onChange={handleChange} 
+                  type="email"
                   className="register__form-input"
-                  placeholder="Email"    
+                  placeholder="Email"
+                  {...register("email", {
+                    required: "Обязательное поле",
+                    pattern: {
+                      value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      message: 'Email должен содержать символ @'
+                      }
+                    }
+                  )}       
                   required
                   />
+            <p className='register__form-error'>
+              {errors?.email && errors?.email.message}
+            </p>  
             <label htmlFor="password" className="register__form-label">Пароль</label>       
             <input id="password"  
                 name="password" 
-                type="password" 
-                value={formParams.password} 
-                  onChange={handleChange} 
+                type="password"
                 className="register__form-input"
-                placeholder="Пароль" 
+                placeholder="Пароль"
+                {...register("password", {
+                    required: "Обязательное поле",
+                    minLength: {
+                      value: 4,
+                      message: 'Минимум 4 символа'
+                    }
+                  })
+                } 
                 required/>
-            <button type="submit" 
-                    className="register__form-submit">
-                    Войти
-            </button>
+                <p className='register__form-error'>
+                  {errors?.password && errors?.password.message}
+                </p> 
+                <input type="submit" 
+                   className="register__form-submit"
+                   value="Войти"
+                   disabled={!isValid}
+                    />
           </form>
           <div className="register__signin">
             <p className="register__signin-text">Ещё не зарегистрированы?</p>

@@ -2,7 +2,7 @@ import React, {useState } from "react";
 import Header from '../Header/Header';
 import * as api from '../../utils/MainApi';
 
-function Profile({signOut, userData}) {
+function Profile({signOut, userData, loggedIn}) {
   const token = localStorage.getItem('jwt');
   const [currentUser, setCurrentUser] = React.useState({name: userData.name, email: userData.email});
   const [formParams, setFormParams] = useState({
@@ -37,7 +37,7 @@ function Profile({signOut, userData}) {
   return (
     <>
       <div className="profile">
-        <Header loggedIn={true}/>
+        <Header loggedIn={loggedIn}/>
         <main>
           <h1 className="profile__header">Привет, {currentUser.name}!</h1>
           <form
