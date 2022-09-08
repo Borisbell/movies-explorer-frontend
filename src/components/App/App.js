@@ -115,7 +115,7 @@ function App() {
     card.isSaved = false;
 
     const cardId = moviesFromMyServer.find( movie => movie.movieId === card.id);
-    
+
     deleteMovie(cardId._id, token)
       .then(deletedMovie => {
         setMoviesFromMyServer(moviesFromMyServer.filter(
@@ -177,7 +177,6 @@ function App() {
                                         moviesDB={moviesDB}
                                         handleSavedMovie={handleSavedMovie}  
                                         handleDeleteMovie={handleDeleteFromMovies}
-                                        setMoviesDB={setMoviesDB}
                                         loggedIn={loggedIn}   
                                         />} />
         <Route path="saved-movies" element={<SavedMovies 

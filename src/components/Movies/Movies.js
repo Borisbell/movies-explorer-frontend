@@ -5,7 +5,7 @@ import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn, setMoviesDB}) {
+function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
   const [cards, setCards] = useState([]);
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
@@ -31,16 +31,39 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn, setMov
       searchResult = searchResult.filter(shortMovies);
     }
     setIsLoading(false);
-    setCards(searchResult);
+    setCards(cards => searchResult);
+    window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
+    window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
+    window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
   }
 
   const handleShortMoviesChange = () => {
     setIsShort(!isShort);
   };
 
+  // useEffect(() => {
+  //   window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
+  //   console.log('moviesSearchque on search', searchQue)
+
+  //   window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
+  //   console.log('moviesSearchIsShort on search', isShort)
+
+  //   window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
+  //   console.log('moviesSearchCards on search', cards)
+  // },[searchQue, isShort, cards])
+
   useEffect(() => {
-    setMoviesDB(moviesDB);
-  },[handleSavedMovie])
+    const moviesSearchque = window.localStorage.getItem('moviesSearchque');
+    if(moviesSearchque !== null){ setSearchQue(JSON.parse(moviesSearchque))};
+    console.log('moviesSearchque on mount', moviesSearchque)
+
+    const moviesSearchIsShort = window.localStorage.getItem('moviesSearchIsShort');
+    if(moviesSearchIsShort !== null){ setIsShort(JSON.parse(moviesSearchIsShort))};
+    console.log('moviesSearchIsShort on mount', moviesSearchIsShort)
+
+    const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
+    setCards(JSON.parse(moviesSearchCards));
+  },[])
 
   return (
     <div className="movies">
