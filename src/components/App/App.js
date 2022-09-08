@@ -44,8 +44,6 @@ function App() {
         .then((res) => {
           setLoggedIn(true);
           setUserData(res);
-          console.log('Login data', res)
-          console.log('userData: ', userData)
         })
         .then(() => {
           navigate('/movies');
@@ -115,32 +113,28 @@ function App() {
   }
 
   useEffect(() => {
-    Promise.all([getMyMovies(token), getBeatFilmMovies()])
-    .then(([myMovies, beatMovies]) => {
-      console.log('myMovies', myMovies);
-      console.log('beatMovies', beatMovies);
-      console.log('userData ', userData);
+    Promise.all([getMyMovies(token), getBeatFilmMovies(), tokenCheck()])
+      .then(([myMovies, beatMovies, userData]) => {
+        const myFilteredMovies = myMovies.filter(filterMyMovies)
+        setMoviesFromMyServer(myFilteredMovies);
+        console.log('myMovies: ', myMovies);
 
-      const myFilteredMovies = myMovies.filter(filterMyMovies)
-      setMoviesFromMyServer(myFilteredMovies);
-      console.log('moviesFromMyServer: ', moviesFromMyServer);
-
-      const updatedArray = beatMovies.map(
-        (movie) => ({
-          ...movie,
-          thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`, 
-          image:`https://api.nomoreparties.co/.${movie.image.url}`,
-          movieId: movie.id, 
-          isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
-        })
-      )
-      console.log('updatedArray: ', updatedArray);
-      setMoviesDB(updatedArray);
-    })
-    .catch(err => {
-      console.log('Ошибка: ', err)
-    });
-  },[]);
+        const updatedArray = beatMovies.map(
+          (movie) => ({
+            ...movie,
+            thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`, 
+            image:`https://api.nomoreparties.co/.${movie.image.url}`,
+            movieId: movie.id, 
+            isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
+          })
+        )
+        console.log('updatedArray: ', updatedArray);
+        setMoviesDB(updatedArray);
+      })
+      .catch(err => {
+        console.log('Ошибка: ', err)
+      });
+  },[loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={userData}>
