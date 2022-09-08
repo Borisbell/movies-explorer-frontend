@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 
-function Movies({moviesDB, handleSavedMovie, loggedIn}) {
+function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn, setMoviesDB}) {
   const [cards, setCards] = useState([]);
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
@@ -38,6 +38,10 @@ function Movies({moviesDB, handleSavedMovie, loggedIn}) {
     setIsShort(!isShort);
   };
 
+  useEffect(() => {
+    setMoviesDB(moviesDB);
+  },[handleSavedMovie])
+
   return (
     <div className="movies">
       <Header loggedIn={loggedIn}/>
@@ -53,6 +57,7 @@ function Movies({moviesDB, handleSavedMovie, loggedIn}) {
           <MoviesCardList placeMovies={true} 
                           cards={cards}
                           handleSavedMovie={handleSavedMovie}  
+                          handleDeleteMovie={handleDeleteMovie}
           />
         }
       </main>

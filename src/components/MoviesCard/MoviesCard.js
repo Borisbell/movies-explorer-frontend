@@ -44,6 +44,7 @@ function MoviesCard({card,
       placeMovies ? <SaveButton 
                       isSaved={isSaved}
                       handleSave={handleSave}  
+                      handleDelete = {handleDelete}
                       />
                   : <DeleteButton handleDelete = {handleDelete}/>
       }

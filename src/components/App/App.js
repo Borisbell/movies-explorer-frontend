@@ -68,11 +68,19 @@ function App() {
   const handleSavedMovie = (card, token) => {
 
     console.log('Clicked save: ', card);
-    console.log('Saving user token: ', token);
-
+    card.isSaved = true;
     const { created_at, id, updated_at, ...newCard } = card;
     newCard.owner = userData._id;
     console.log('Edited card ', newCard)
+
+    const updatedMovieDB = moviesDB.map(movie => {
+      if(movie.id === card.id){
+        return {...movie, isSaved:true };
+      }
+      return movie;
+    })
+
+    setMoviesDB(updatedMovieDB);
 
     addMovie(newCard, token)
       .then(newMovie => {
@@ -83,21 +91,32 @@ function App() {
       .catch(err => {
         console.log('Ошибка: ', err)
       })
-
-    const updatedMovieDB = moviesDB.map(movie => {
-      if(movie.id === card.id){
-        return {...movie, isSaved:true };
-      }
-      return movie;
-    })
-    
-    setMoviesDB(updatedMovieDB);
   }  
 
   const handleDeleteMovie = (card, token) => {
     console.log('Clicked delete', card);
 
+    card.isSaved = false;
+
     deleteMovie(card._id, token)
+      .then(deletedMovie => {
+        setMoviesFromMyServer(moviesFromMyServer.filter(
+          (movie) => movie._id !== deletedMovie._id
+        ))
+      })
+      .catch(err => {
+        console.log('Ошибка: ', err)
+      })
+  }
+
+  const handleDeleteFromMovies = (card, token) => {
+    console.log('Clicked delete', card);
+
+    card.isSaved = false;
+
+    const cardId = moviesFromMyServer.find( movie => movie.movieId === card.id);
+    
+    deleteMovie(cardId._id, token)
       .then(deletedMovie => {
         setMoviesFromMyServer(moviesFromMyServer.filter(
           (movie) => movie._id !== deletedMovie._id
@@ -136,6 +155,8 @@ function App() {
       });
   },[loggedIn]);
 
+
+
   return (
     <CurrentUserContext.Provider value={userData}>
       <Routes>
@@ -155,6 +176,8 @@ function App() {
         <Route path="movies" element={<Movies 
                                         moviesDB={moviesDB}
                                         handleSavedMovie={handleSavedMovie}  
+                                        handleDeleteMovie={handleDeleteFromMovies}
+                                        setMoviesDB={setMoviesDB}
                                         loggedIn={loggedIn}   
                                         />} />
         <Route path="saved-movies" element={<SavedMovies 
