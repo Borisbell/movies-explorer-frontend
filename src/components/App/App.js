@@ -7,6 +7,7 @@ import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as api from '../../utils/MainApi';
 import { getBeatFilmMovies } from '../../utils/MoviesApi';
@@ -169,24 +170,34 @@ function App() {
           handleRegister={handleRegister}/>} 
           />
         <Route path="profile" element={
-          <Profile loggedIn={loggedIn} 
+          <ProtectedRoute loggedIn={loggedIn}>
+             <Profile loggedIn={loggedIn} 
                    signOut={signOut}
                    userData={userData}/>
-        } />
-        <Route path="movies" element={<Movies 
-                                        moviesDB={moviesDB}
-                                        handleSavedMovie={handleSavedMovie}  
-                                        handleDeleteMovie={handleDeleteFromMovies}
-                                        loggedIn={loggedIn}   
-                                        />} />
-        <Route path="saved-movies" element={<SavedMovies 
-                                              userData={userData}
-                                              loggedIn={loggedIn} 
-                                              setMoviesFromMyServer={setMoviesFromMyServer}
-                                              moviesFromMyServer={moviesFromMyServer}
-                                              handleDeleteMovie={handleDeleteMovie}
-                                              token={token}
-                                              />} />
+          </ProtectedRoute>
+        }/>
+          <Route path="movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Movies 
+                moviesDB={moviesDB}
+                handleSavedMovie={handleSavedMovie}  
+                handleDeleteMovie={handleDeleteFromMovies}
+                loggedIn={loggedIn}   
+                />
+             </ProtectedRoute>                                
+          }/>
+          <Route path="saved-movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <SavedMovies 
+                userData={userData}
+                loggedIn={loggedIn} 
+                setMoviesFromMyServer={setMoviesFromMyServer}
+                moviesFromMyServer={moviesFromMyServer}
+                handleDeleteMovie={handleDeleteMovie}
+                token={token}
+                />
+            </ProtectedRoute>      
+          }/>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </CurrentUserContext.Provider>
