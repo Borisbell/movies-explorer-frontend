@@ -34,23 +34,17 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
     setCards(cards => searchResult);
     window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
     window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
-    window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
   }
 
   const handleShortMoviesChange = () => {
     setIsShort(!isShort);
   };
 
-  // useEffect(() => {
-  //   window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
-  //   console.log('moviesSearchque on search', searchQue)
-
-  //   window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
-  //   console.log('moviesSearchIsShort on search', isShort)
-
-  //   window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
-  //   console.log('moviesSearchCards on search', cards)
-  // },[searchQue, isShort, cards])
+  useEffect(() => {
+    if(cards.length){
+    window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
+    console.log('moviesSearchCards on search', cards)}
+  },[cards, handleSavedMovie, handleDeleteMovie])
 
   useEffect(() => {
     const moviesSearchque = window.localStorage.getItem('moviesSearchque');
@@ -62,7 +56,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
     console.log('moviesSearchIsShort on mount', moviesSearchIsShort)
 
     const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
-    setCards(JSON.parse(moviesSearchCards));
+    if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))};
   },[])
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Switcher from '../Switcher/Switcher';
 import search from '../../images/search/search.svg';
 
@@ -19,13 +19,13 @@ function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesC
                  className="search-form__icon"
                  />
             <input id="movie" 
-                      name="movie" 
-                      type="text" 
-                      onChange={handleSearch} 
-                      className="search-form__input"
-                      placeholder="Фильм"    
-                      required
-                      />
+                   name="movie" 
+                   type="text" 
+                   onChange={handleSearch} 
+                   className="search-form__input"
+                   placeholder="Фильм"    
+                   required
+                   />
           </div>
         <div className="search-form__controls">
           <button type="submit" 

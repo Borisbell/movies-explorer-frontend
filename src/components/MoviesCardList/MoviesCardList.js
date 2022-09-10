@@ -12,11 +12,16 @@ function MoviesCardList({placeMovies,
   const handleLoadMoreMovies = () => {
     setSliceEnd(sliceEnd + counter);
     setCardsLeft(cardsLeft - counter);
+    console.log('sliceEnd ', sliceEnd);
+    console.log('counter ', counter);
+    console.log('cardsLeft ', cardsLeft);
   }
 
   useEffect(()=>{
     setCardsLeft(cards.length - sliceEnd);
+  }, [cards.length, sliceEnd])
 
+  useEffect(() => {
     if(window.innerWidth >= 920){
       setCounter(3);
       setSliceEnd(12);
@@ -27,8 +32,7 @@ function MoviesCardList({placeMovies,
       setCounter(1);
       setSliceEnd(5);
     }
-
-  }, [cards.length, sliceEnd])
+  }, [])
 
   return (
     <div className='movies-card-list'>
@@ -45,7 +49,7 @@ function MoviesCardList({placeMovies,
                     handleDeleteMovie={handleDeleteMovie}
                     />
           ))}
-      {cardsLeft>0 && <button className='movies-card-list__load-more' onClick={handleLoadMoreMovies}>Ещё</button>}
+      {cardsLeft > 0 && <button className='movies-card-list__load-more' onClick={handleLoadMoreMovies}>Ещё</button>}
     </div>
   );
 }
