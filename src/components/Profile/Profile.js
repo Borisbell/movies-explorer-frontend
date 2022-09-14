@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from '../Header/Header';
 import { useForm } from "react-hook-form";
 import * as api from '../../utils/MainApi';
@@ -32,7 +32,7 @@ function Profile({signOut, loggedIn}) {
     api.getContent(token)
       .then((res) => {
         console.log("UserData on mount ", res)
-        setCurrentUser(res)
+        setCurrentUser(res);
       })
   }, [])
 
@@ -56,7 +56,8 @@ function Profile({signOut, loggedIn}) {
                     name="name" 
                     type="name"
                     className="profile__form-input"
-                    placeholder={currentUser.name}
+                    value={currentUser.name}
+                    placeholder='Ваше Имя'
                     {...register("name", {
                     required: "Имя - обязательное поле",
                     minLength: {
@@ -79,7 +80,8 @@ function Profile({signOut, loggedIn}) {
                   name="email" 
                   type="email"
                   className="profile__form-input"
-                  placeholder={currentUser.email}
+                  value={currentUser.email}
+                    placeholder='Ваш Email'
                   {...register("email", {
                     required: "Email - обязательное поле",
                     pattern: {

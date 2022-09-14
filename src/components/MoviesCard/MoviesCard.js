@@ -6,6 +6,7 @@ function MoviesCard({card,
                      img, 
                      imgAlt,
                      nameRU,
+                     trailerLink,
                      duration,
                      isSaved,
                      placeMovies,
@@ -33,9 +34,13 @@ function MoviesCard({card,
 
   return (
     <div className="movies-card">
+      <a href={trailerLink}
+         target="_blank"
+         rel="noreferrer noopener">
       <img src={img} 
            alt={imgAlt} 
            className="movies-card__img"/>
+      </a>
       <div className="movies-card__description">
         <p className="movies-card__title">{nameRU} </p>
         <p className="movies-card__duration">{durationInHours}</p>

@@ -34,7 +34,8 @@ function App() {
   const handleRegister = (name, email, password) => {
     return api.register(name, email, password)
     .then(() => {
-      handleLogin({ email, password })
+      handleLogin({ email, password });
+      navigate('/movies');
     });
   }
 
@@ -46,9 +47,6 @@ function App() {
           setLoggedIn(true);
           setUserData(res);
         })
-        .then(() => {
-          navigate('/movies');
-        })
         .catch(err => {
           console.log('Ошибка: ', err)
         })
@@ -59,9 +57,14 @@ function App() {
 
   const signOut = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('moviesSearchque');
+    localStorage.removeItem('moviesSearchIsShort');
+    localStorage.removeItem('moviesSearchCards');
     setLoggedIn(false);
     setUserData(null);
-    navigate('/signin');
+    setMoviesDB([]);
+    setMoviesFromMyServer([]);
+    navigate('/');
     }
 
   const token = localStorage.getItem('jwt');
@@ -133,11 +136,16 @@ function App() {
   }
 
   useEffect(() => {
-    Promise.all([getMyMovies(token), getBeatFilmMovies(), tokenCheck()])
-      .then(([myMovies, beatMovies, userData]) => {
+    Promise.all([getMyMovies(token), 
+                 getBeatFilmMovies(), 
+                 tokenCheck()
+                ])
+      .then(([myMovies, 
+              beatMovies, 
+              userData
+            ]) => {
         const myFilteredMovies = myMovies.filter(filterMyMovies)
         setMoviesFromMyServer(myFilteredMovies);
-        console.log('myMovies: ', myMovies);
 
         const updatedArray = beatMovies.map(
           (movie) => ({
@@ -148,15 +156,13 @@ function App() {
             isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
           })
         )
-        console.log('updatedArray: ', updatedArray);
+
         setMoviesDB(updatedArray);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       });
   },[loggedIn]);
-
-
 
   return (
     <CurrentUserContext.Provider value={userData}>
@@ -166,8 +172,11 @@ function App() {
           <Login
             handleLogin={handleLogin} 
           />} />
-        <Route path="signup" element={<Register 
-          handleRegister={handleRegister}/>} 
+        <Route path="signup" 
+               element={<Register 
+               handleRegister={handleRegister}
+               handleLogin={handleLogin}  
+               />} 
           />
         <Route path="profile" element={
           <ProtectedRoute loggedIn={loggedIn}>

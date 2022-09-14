@@ -40,8 +40,9 @@ function MoviesCardList({placeMovies,
         <MoviesCard key={card.movieId}
                     card={card}
                     img={card.image}
+                    trailerLink={card.trailerLink}
                     nameRU={card.nameRU}
-                    imgAlt={card.image.alternativeText} 
+                    // imgAlt={card.image.alternativeText} 
                     duration={card.duration}
                     isSaved={card.isSaved} 
                     placeMovies={placeMovies} 

@@ -43,17 +43,15 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
   useEffect(() => {
     if(cards.length){
     window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
-    console.log('moviesSearchCards on search', cards)}
+    }
   },[cards, handleSavedMovie, handleDeleteMovie])
 
   useEffect(() => {
     const moviesSearchque = window.localStorage.getItem('moviesSearchque');
     if(moviesSearchque !== null){ setSearchQue(JSON.parse(moviesSearchque))};
-    console.log('moviesSearchque on mount', moviesSearchque)
 
     const moviesSearchIsShort = window.localStorage.getItem('moviesSearchIsShort');
     if(moviesSearchIsShort !== null){ setIsShort(JSON.parse(moviesSearchIsShort))};
-    console.log('moviesSearchIsShort on mount', moviesSearchIsShort)
 
     const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
     if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))};
@@ -70,12 +68,13 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
                     />
         {isLoading ? 
           <Preloader />
-          :
+          : cards.length > 0 ?
           <MoviesCardList placeMovies={true} 
                           cards={cards}
                           handleSavedMovie={handleSavedMovie}  
                           handleDeleteMovie={handleDeleteMovie}
           />
+          : <p className='movies__not-found'>Ничего не найдено 😕</p>
         }
       </main>
       <Footer />

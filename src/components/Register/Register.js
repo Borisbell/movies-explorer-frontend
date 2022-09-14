@@ -3,7 +3,7 @@ import SignupHeader from '../SignupHeader/SignupHeader';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
-function Register({handleRegister}) {
+function Register({handleRegister, handleLogin}) {
   const {
     register,
     formState: { errors, isValid },
@@ -18,7 +18,7 @@ function Register({handleRegister}) {
   const onSubmit = ({ name, email, password }) => {
     handleRegister(name, email, password)
       .then(() => { 
-        setSignupSuccess(true);
+        handleLogin(email, password)
       })
       .catch(err => {
         setSignupSuccess(false);
