@@ -41,7 +41,7 @@ function SavedMovies({loggedIn, handleDeleteMovie, moviesFromMyServer}) {
 
   useEffect(() => {
     setCards(moviesFromMyServer);
-  }, [])
+  }, [moviesFromMyServer])
 
   return (
     <div className='saved-movies'>

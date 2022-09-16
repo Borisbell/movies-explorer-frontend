@@ -2,7 +2,7 @@ import React from 'react';
 import Switcher from '../Switcher/Switcher';
 import search from '../../images/search/search.svg';
 
-function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesChange}) {
+function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesChange, searchQue }) {
   const desktopSwitcher = document.querySelector('.search-form__switcher');
   if(window.innerWidth < 601) {
     desktopSwitcher.remove();
@@ -23,7 +23,8 @@ function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesC
                    type="text" 
                    onChange={handleSearch} 
                    className="search-form__input"
-                   placeholder="Фильм"    
+                   placeholder="Фильм" 
+                   value={searchQue}   
                    required
                    />
           </div>

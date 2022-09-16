@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Header from '../Header/Header';
 import { useForm } from "react-hook-form";
 import * as api from '../../utils/MainApi';
@@ -7,11 +7,14 @@ function Profile({signOut, loggedIn}) {
   const token = localStorage.getItem('jwt');
   const [currentUser, setCurrentUser] = useState({});
   const [message, setMessage] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   const {
     register,
     formState: { errors, isValid },
-    handleSubmit
+    handleSubmit,
+    setValue
   } = useForm({
     mode: "onChange"
   })
@@ -33,6 +36,8 @@ function Profile({signOut, loggedIn}) {
       .then((res) => {
         console.log("UserData on mount ", res)
         setCurrentUser(res);
+        setValue('name', res.name, {shouldValidate: true});
+        setValue('email', res.email, {shouldValidate: true})
       })
   }, [])
 
@@ -56,7 +61,6 @@ function Profile({signOut, loggedIn}) {
                     name="name" 
                     type="name"
                     className="profile__form-input"
-                    value={currentUser.name}
                     placeholder='Ваше Имя'
                     {...register("name", {
                     required: "Имя - обязательное поле",
@@ -80,17 +84,17 @@ function Profile({signOut, loggedIn}) {
                   name="email" 
                   type="email"
                   className="profile__form-input"
-                  value={currentUser.email}
-                    placeholder='Ваш Email'
+                  placeholder='Ваш Email'
                   {...register("email", {
                     required: "Email - обязательное поле",
                     pattern: {
-                      value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                      message: 'Email должен содержать символ @'
-                    }
+                      value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                      message: 'Email должен содержать @ и домен с точкой'
+                      } 
                     }
                   )}   
-                  required/>
+                  required 
+                  />
             </fieldset>
             <div className="profile__buttons">
               {message && <p className='profile__form-error'>{message}</p>}      

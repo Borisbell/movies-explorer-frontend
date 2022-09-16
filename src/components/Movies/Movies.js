@@ -54,7 +54,8 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
     if(moviesSearchIsShort !== null){ setIsShort(JSON.parse(moviesSearchIsShort))};
 
     const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
-    if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))};
+    if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))}
+      else { setCards(cards => JSON.parse(moviesSearchCards))}
   },[])
 
   return (
@@ -65,6 +66,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
                     handleSearchData={handleSearchData}
                     isShort={isShort} 
                     handleShortMoviesChange={handleShortMoviesChange} 
+                    searchQue={searchQue}
                     />
         {isLoading ? 
           <Preloader />
