@@ -55,7 +55,23 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
 
     const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
     if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))}
+  },[])
+
+  useEffect(() => {
+    const moviesSearchCards = JSON.parse(localStorage.getItem('moviesSearchCards'));
+    console.log('moviesSearchCards after parse: ', moviesSearchCards)
+    const updatedSavedMoviesArray = moviesSearchCards.map(obj => {
+      const tempObj = moviesDB.find(item => item.movieId === obj.movieId)
+      if (obj.isSaved === true && tempObj.isSaved === false){
+        return {...obj, isSaved: false};
+      }
+      return obj;
+    });
+
+    setCards(prev => updatedSavedMoviesArray);
+
   },[moviesDB])
+
 
   return (
     <div className="movies">
