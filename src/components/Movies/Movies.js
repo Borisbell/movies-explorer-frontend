@@ -44,7 +44,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
     if(cards.length){
     window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
     }
-  },[cards, handleSavedMovie, handleDeleteMovie])
+  },[moviesDB, cards, handleSavedMovie, handleDeleteMovie])
 
   useEffect(() => {
     const moviesSearchque = window.localStorage.getItem('moviesSearchque');
@@ -55,8 +55,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
 
     const moviesSearchCards = window.localStorage.getItem('moviesSearchCards');
     if(moviesSearchCards !== null){ setCards(cards => JSON.parse(moviesSearchCards))}
-      else { setCards(cards => JSON.parse(moviesSearchCards))}
-  },[])
+  },[moviesDB])
 
   return (
     <div className="movies">

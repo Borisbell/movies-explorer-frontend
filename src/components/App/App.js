@@ -89,18 +89,28 @@ function App() {
     addMovie(newCard, token)
       .then(newMovie => {
         newMovie.isSaved = true;
-        setMoviesFromMyServer([newMovie, ...moviesFromMyServer]);
-        console.log('moviesFromMyServer: ', moviesFromMyServer)
+        setMoviesFromMyServer(prev => [...moviesFromMyServer, newMovie]);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       })
+    
+      console.log('moviesFromMyServer: ', moviesFromMyServer)
   }  
 
   const handleDeleteMovie = (card, token) => {
     console.log('Clicked delete', card);
 
-    card.isSaved = false;
+    setMoviesDB(current => current.map(obj => {
+      if (obj.id === card.movieId) {
+        return {...obj, isSaved: false};
+      }
+      return obj;
+      }
+      )
+    );
+
+    console.log('moviesDB after delete is saved movies', moviesDB);
 
     deleteMovie(card._id, token)
       .then(deletedMovie => {
@@ -115,10 +125,18 @@ function App() {
 
   const handleDeleteFromMovies = (card, token) => {
     console.log('Clicked delete', card);
-
     card.isSaved = false;
+    setMoviesDB(current => current.map(obj => {
+      if (obj.id === card.movieId) {
+        return {...obj, isSaved: false};
+      }
+      return obj;
+      }
+      )
+    );
+    console.log('moviesDB after delete', moviesDB);
 
-    const cardId = moviesFromMyServer.find( movie => movie.movieId === card.id);
+    const cardId = moviesFromMyServer.find(movie => movie.movieId === card.id);
 
     deleteMovie(cardId._id, token)
       .then(deletedMovie => {

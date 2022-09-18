@@ -7,8 +7,6 @@ function Profile({signOut, loggedIn}) {
   const token = localStorage.getItem('jwt');
   const [currentUser, setCurrentUser] = useState({});
   const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
 
   const {
     register,
@@ -67,7 +65,8 @@ function Profile({signOut, loggedIn}) {
                     minLength: {
                       value: 2,
                       message: 'Минимум 2 символа в поле имя'
-                    }  
+                    },
+                    validate: value => value !== currentUser.name,
                     })}
                     required
                     />
@@ -90,7 +89,8 @@ function Profile({signOut, loggedIn}) {
                     pattern: {
                       value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
                       message: 'Email должен содержать @ и домен с точкой'
-                      } 
+                      },
+                    validate: value => value !== currentUser.email,   
                     }
                   )}   
                   required 
