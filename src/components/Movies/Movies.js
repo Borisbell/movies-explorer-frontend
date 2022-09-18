@@ -60,7 +60,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
   useEffect(() => {
     const moviesSearchCards = JSON.parse(localStorage.getItem('moviesSearchCards'));
     console.log('moviesSearchCards after parse: ', moviesSearchCards)
-    const updatedSavedMoviesArray = moviesSearchCards.map(obj => {
+    if (moviesSearchCards !== null) {const updatedSavedMoviesArray = moviesSearchCards.map(obj => {
       const tempObj = moviesDB.find(item => item.movieId === obj.movieId)
       if (obj.isSaved === true && tempObj.isSaved === false){
         return {...obj, isSaved: false};
@@ -68,7 +68,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
       return obj;
     });
 
-    setCards(prev => updatedSavedMoviesArray);
+    setCards(prev => updatedSavedMoviesArray);}
 
   },[moviesDB])
 

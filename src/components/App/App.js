@@ -15,6 +15,7 @@ import { addMovie, getMyMovies, deleteMovie } from '../../utils/MainApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [hasToken, setHasTokken] = useState('');
   const [userData, setUserData] = useState({});
   const [moviesDB, setMoviesDB] = useState([]);
   const [moviesFromMyServer, setMoviesFromMyServer] = useState([]);
@@ -42,6 +43,7 @@ function App() {
   const tokenCheck = () => {
     if (localStorage.getItem('jwt')){
       let jwt = localStorage.getItem('jwt');
+      setHasTokken(jwt)
       api.getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
@@ -164,6 +166,9 @@ function App() {
             ]) => {
         const myFilteredMovies = myMovies.filter(filterMyMovies)
         setMoviesFromMyServer(myFilteredMovies);
+        
+        console.log('loggedIn on mount', loggedIn);
+        console.log('hasToken on mount', hasToken);
 
         const updatedArray = beatMovies.map(
           (movie) => ({
@@ -180,7 +185,7 @@ function App() {
       .catch(err => {
         console.log('Ошибка: ', err)
       });
-  },[loggedIn]);
+  },[loggedIn, token, ]);
 
   return (
     <CurrentUserContext.Provider value={userData}>
@@ -196,25 +201,8 @@ function App() {
                handleLogin={handleLogin}  
                />} 
           />
-        <Route path="profile" element={
-          <ProtectedRoute loggedIn={loggedIn}>
-             <Profile loggedIn={loggedIn} 
-                   signOut={signOut}
-                   userData={userData}/>
-          </ProtectedRoute>
-        }/>
-          <Route path="movies" element={
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Movies 
-                moviesDB={moviesDB}
-                handleSavedMovie={handleSavedMovie}  
-                handleDeleteMovie={handleDeleteFromMovies}
-                loggedIn={loggedIn}   
-                />
-             </ProtectedRoute>                                
-          }/>
-          <Route path="saved-movies" element={
-            <ProtectedRoute loggedIn={loggedIn}>
+        <Route element={<ProtectedRoute loggedIn={localStorage.getItem('jwt')} />}>
+            <Route path="saved-movies" element={ 
               <SavedMovies 
                 userData={userData}
                 loggedIn={loggedIn} 
@@ -222,9 +210,25 @@ function App() {
                 moviesFromMyServer={moviesFromMyServer}
                 handleDeleteMovie={handleDeleteMovie}
                 token={token}
-                />
-            </ProtectedRoute>      
-          }/>
+              />
+              }   
+            />
+            <Route path="movies" element={ 
+              <Movies 
+                moviesDB={moviesDB}
+                handleSavedMovie={handleSavedMovie}  
+                handleDeleteMovie={handleDeleteFromMovies}
+                loggedIn={loggedIn}   
+              />
+              }   
+            />
+            <Route path="profile" element={ 
+              <Profile loggedIn={loggedIn} 
+                        signOut={signOut}
+                        userData={userData}/>
+              }   
+            />
+        </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </CurrentUserContext.Provider>
