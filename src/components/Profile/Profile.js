@@ -1,27 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Header from '../Header/Header';
-import { useForm } from "react-hook-form";
 import * as api from '../../utils/MainApi';
+// import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function Profile({signOut, loggedIn}) {
+function Profile({signOut,
+                  loggedIn, 
+                  userData,
+                  setUserData
+                }) {
+  const inputName = useRef(null);
+  const inputEmail = useRef(null);
   const token = localStorage.getItem('jwt');
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(userData);
   const [message, setMessage] = useState('');
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+  });
+  const [canSubmit, setCanSubmit] = useState(false);
+  // const {userData, setUserData} = useContext(CurrentUserContext);
 
-  const {
-    register,
-    formState: { errors, isValid },
-    handleSubmit,
-    setValue
-  } = useForm({
-    mode: "onChange"
-  })
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
 
-  const onSubmit = ({ name, email }) => {
-    api.editProfile(email, name, token)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.editProfile( values.email, values.name, token)
       .then(res => {
-        console.log('editProfile res - ',res.data);
         setCurrentUser(res.data);
+        setUserData(res.data);
+        setMessage(`Данные обновлены. Имя: ${res.data.name}, емейл: ${res.data.email}`);
       })
       .catch(err => {
         console.log('Ошибка: ', err);
@@ -30,14 +39,19 @@ function Profile({signOut, loggedIn}) {
   }
 
   useEffect(() => {
-    api.getContent(token)
-      .then((res) => {
-        console.log("UserData on mount ", res)
-        setCurrentUser(res);
-        setValue('name', res.name, {shouldValidate: true});
-        setValue('email', res.email, {shouldValidate: true})
-      })
+    inputName.current.value = currentUser.name;
+    inputEmail.current.value = currentUser.email;
+    setValues({
+      name: currentUser.name,
+      email: currentUser.email,
+    });
   }, [])
+
+  useEffect(() => {
+    if(values.name !== currentUser.name || values.email !== currentUser.email){
+      setCanSubmit(true)
+    } else {  setCanSubmit(false) }
+  }, [values])
 
   return (
     <>
@@ -46,63 +60,55 @@ function Profile({signOut, loggedIn}) {
         <main>
           <h1 className="profile__header">Привет, {currentUser.name}!</h1>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit}
             className="profile__form">
             <fieldset className="profile__fieldset">
               <label htmlFor="name" className="profile__form-label">
-              Имя
-              <p className='profile__form-error'>
-              {errors?.name && errors?.name.message}
-              </p> 
+              Имя 
               </label>
-              <input id="name" 
-                    name="name" 
-                    type="name"
-                    className="profile__form-input"
-                    placeholder='Ваше Имя'
-                    {...register("name", {
-                    required: "Имя - обязательное поле",
-                    minLength: {
-                      value: 2,
-                      message: 'Минимум 2 символа в поле имя'
-                    },
-                    validate: value => value !== currentUser.name,
-                    })}
-                    required
-                    />
+              <div className="profile__form-input-group">
+                <input id="name" 
+                      name="name" 
+                      type="name"
+                      className="profile__form-input"
+                      placeholder='Ваше Имя'
+                      pattern="^[A-Za-z0-9]{3,16}$"
+                      required
+                      onChange={onChange}
+                      ref={inputName}
+                      />   
+                <p className='profile__form-error'>
+                Username should be 3-16 characters and shouldn't include any special character!
+                </p> 
+              </div>      
             </fieldset>
-            
             <fieldset className="profile__fieldset">
               <label htmlFor="email" className="profile__form-label">
               Email
               <p className='profile__form-error'>
-              {errors?.email && errors?.email.message}
               </p> 
-              </label>       
-              <input id="email"  
-                  name="email" 
-                  type="email"
-                  className="profile__form-input"
-                  placeholder='Ваш Email'
-                  {...register("email", {
-                    required: "Email - обязательное поле",
-                    pattern: {
-                      value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                      message: 'Email должен содержать @ и домен с точкой'
-                      },
-                    validate: value => value !== currentUser.email,   
-                    }
-                  )}   
-                  required 
-                  />
+              </label>
+              <div className="profile__form-input-group">
+                <input id="email"  
+                      name="email" 
+                      type="email"
+                      className="profile__form-input"
+                      placeholder='Ваш Email'
+                      required 
+                      onChange={onChange}
+                      ref={inputEmail}
+                    />
+                <p className='profile__form-error'>
+                It should be a valid email address!
+                </p> 
+              </div>
             </fieldset>
             <div className="profile__buttons">
               {message && <p className='profile__form-error'>{message}</p>}      
-              <input type="submit" 
-                    className="profile__edit"
-                    value="Редактировать"
-                    disabled={!isValid}
-                      /> 
+              {canSubmit && <input type="submit" 
+                                    className="profile__edit"
+                                    value="Редактировать"
+                            /> }
               <button className="profile__logout"
                       onClick={signOut}>
                       Выйти из аккаунта

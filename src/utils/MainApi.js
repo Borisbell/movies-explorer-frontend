@@ -20,7 +20,7 @@ export const register = (name, email, password) => {
   .then(checkResponse)
 };
 
-export const editProfile =(email, name, token) => {
+export const editProfile = (email, name, token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'PATCH',
     headers: { 

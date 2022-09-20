@@ -15,7 +15,6 @@ import { addMovie, getMyMovies, deleteMovie } from '../../utils/MainApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [hasToken, setHasTokken] = useState('');
   const [userData, setUserData] = useState({});
   const [moviesDB, setMoviesDB] = useState([]);
   const [moviesFromMyServer, setMoviesFromMyServer] = useState([]);
@@ -43,7 +42,6 @@ function App() {
   const tokenCheck = () => {
     if (localStorage.getItem('jwt')){
       let jwt = localStorage.getItem('jwt');
-      setHasTokken(jwt)
       api.getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
@@ -72,8 +70,6 @@ function App() {
   const token = localStorage.getItem('jwt');
 
   const handleSavedMovie = (card, token) => {
-
-    console.log('Clicked save: ', card);
     card.isSaved = true;
     const { created_at, id, updated_at, ...newCard } = card;
     newCard.owner = userData._id;
@@ -96,8 +92,6 @@ function App() {
       .catch(err => {
         console.log('Ошибка: ', err)
       })
-    
-      console.log('moviesFromMyServer: ', moviesFromMyServer)
   }  
 
   const handleDeleteMovie = (card, token) => {
@@ -112,8 +106,6 @@ function App() {
       )
     );
 
-    console.log('moviesDB after delete is saved movies', moviesDB);
-
     deleteMovie(card._id, token)
       .then(deletedMovie => {
         setMoviesFromMyServer(moviesFromMyServer.filter(
@@ -126,7 +118,6 @@ function App() {
   }
 
   const handleDeleteFromMovies = (card, token) => {
-    console.log('Clicked delete', card);
     card.isSaved = false;
     setMoviesDB(current => current.map(obj => {
       if (obj.id === card.movieId) {
@@ -136,7 +127,6 @@ function App() {
       }
       )
     );
-    console.log('moviesDB after delete', moviesDB);
 
     const cardId = moviesFromMyServer.find(movie => movie.movieId === card.id);
 
@@ -166,10 +156,6 @@ function App() {
             ]) => {
         const myFilteredMovies = myMovies.filter(filterMyMovies)
         setMoviesFromMyServer(myFilteredMovies);
-        
-        console.log('loggedIn on mount', loggedIn);
-        console.log('hasToken on mount', hasToken);
-
         const updatedArray = beatMovies.map(
           (movie) => ({
             ...movie,
@@ -179,16 +165,15 @@ function App() {
             isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
           })
         )
-
         setMoviesDB(updatedArray);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       });
-  },[loggedIn, token, ]);
+  },[loggedIn]);
 
   return (
-    <CurrentUserContext.Provider value={userData}>
+    <CurrentUserContext.Provider value={{userData, setUserData}}>
       <Routes>
         <Route path="/" element={<Main loggedIn={loggedIn}/>} />
         <Route path="signin" element={
@@ -225,7 +210,9 @@ function App() {
             <Route path="profile" element={ 
               <Profile loggedIn={loggedIn} 
                         signOut={signOut}
-                        userData={userData}/>
+                        userData={userData}
+                        setUserData={setUserData}
+                        />
               }   
             />
         </Route>
