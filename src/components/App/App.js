@@ -56,7 +56,8 @@ function App() {
           console.log('Ошибка: ', err)
         })
       } else {
-        console.log('jwt not found in localstorage')
+        console.log('jwt not found in localstorage');
+        setIsLoading(false);
       }
     }
 
