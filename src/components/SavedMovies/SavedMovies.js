@@ -6,7 +6,6 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 function SavedMovies({loggedIn, handleDeleteMovie, moviesFromMyServer}) {
   const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchQue, setSearchQue] = useState('');
   const [isShort, setIsShort] = useState(false);
 
@@ -23,16 +22,12 @@ function SavedMovies({loggedIn, handleDeleteMovie, moviesFromMyServer}) {
   }
 
   function handleSearchData(event) {
-    setIsLoading(true);
     event.preventDefault();
     let searchResult = moviesFromMyServer.filter(filterMovies);
     if(isShort){
       searchResult = searchResult.filter(shortMovies);
     }
-    setIsLoading(false);
-    setCards(cards => searchResult);
-    window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
-    window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
+    setCards((cards) => searchResult);
   }
 
   const handleShortMoviesChange = () => {
@@ -40,7 +35,7 @@ function SavedMovies({loggedIn, handleDeleteMovie, moviesFromMyServer}) {
   };
 
   useEffect(() => {
-    setCards(moviesFromMyServer);
+    setCards((prev) => moviesFromMyServer);
   }, [moviesFromMyServer])
 
   return (

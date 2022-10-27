@@ -11,14 +11,17 @@ function Profile({signOut,
   const inputName = useRef(null);
   const inputEmail = useRef(null);
   const token = localStorage.getItem('jwt');
-  const [currentUser, setCurrentUser] = useState(userData);
+  const [currentUser, setCurrentUser] = useState({});
   const [message, setMessage] = useState('');
   const [values, setValues] = useState({
     name: "",
     email: "",
   });
   const [canSubmit, setCanSubmit] = useState(false);
+  const [isTooltipShown, setIsTooltipShown] = useState(false);
   // const {userData, setUserData} = useContext(CurrentUserContext);
+
+  // console.log('userData: ', userData);
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -36,88 +39,90 @@ function Profile({signOut,
         console.log('Ошибка: ', err);
         setMessage(JSON.stringify(err.message));
       })
+    setIsTooltipShown(true);
+    setTimeout(setIsTooltipShown(false), "5000");
   }
 
   useEffect(() => {
-    inputName.current.value = currentUser.name;
-    inputEmail.current.value = currentUser.email;
+    setCurrentUser(userData)
+    inputName.current.value = userData.name;
+    inputEmail.current.value = userData.email;
     setValues({
       name: currentUser.name,
       email: currentUser.email,
     });
-  }, [])
+  }, [userData])
 
   useEffect(() => {
     if(values.name !== currentUser.name || values.email !== currentUser.email){
-      setCanSubmit(true)
-    } else {  setCanSubmit(false) }
-  }, [values])
+      setCanSubmit((prev) => true)
+    } else {  setCanSubmit((prev) => false) }
+  }, [values.name, currentUser.name, values.email, currentUser.email])
 
   return (
-    <>
-      <div className="profile">
-        <Header loggedIn={loggedIn}/>
-        <main>
-          <h1 className="profile__header">Привет, {currentUser.name}!</h1>
-          <form
-            onSubmit={handleSubmit}
-            className="profile__form">
-            <fieldset className="profile__fieldset">
-              <label htmlFor="name" className="profile__form-label">
-              Имя 
-              </label>
-              <div className="profile__form-input-group">
-                <input id="name" 
-                      name="name" 
-                      type="name"
-                      className="profile__form-input"
-                      placeholder='Ваше Имя'
-                      pattern="^[A-Za-z0-9]{3,16}$"
-                      required
-                      onChange={onChange}
-                      ref={inputName}
-                      />   
-                <p className='profile__form-error'>
-                Username should be 3-16 characters and shouldn't include any special character!
-                </p> 
-              </div>      
-            </fieldset>
-            <fieldset className="profile__fieldset">
-              <label htmlFor="email" className="profile__form-label">
-              Email
+    <div className="profile">
+      <Header loggedIn={loggedIn}/>
+      <main>
+        <h1 className="profile__header">Привет, {currentUser.name}!</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="profile__form">
+          <fieldset className="profile__fieldset">
+            <label htmlFor="name" className="profile__form-label">
+            Имя 
+            </label>
+            <div className="profile__form-input-group">
+              <input id="name" 
+                    name="name" 
+                    type="name"
+                    className="profile__form-input"
+                    placeholder='Ваше Имя'
+                    pattern="^[а-яА-ЯёЁa-zA-Z0-9]{3,16}$"
+                    required
+                    onChange={onChange}
+                    ref={inputName}
+                    />   
               <p className='profile__form-error'>
+              Имя должно содержать 3-16 знаков, без спецсимволов.
               </p> 
-              </label>
-              <div className="profile__form-input-group">
-                <input id="email"  
-                      name="email" 
-                      type="email"
-                      className="profile__form-input"
-                      placeholder='Ваш Email'
-                      required 
-                      onChange={onChange}
-                      ref={inputEmail}
-                    />
-                <p className='profile__form-error'>
-                It should be a valid email address!
-                </p> 
-              </div>
-            </fieldset>
-            <div className="profile__buttons">
-              {message && <p className='profile__form-error'>{message}</p>}      
-              {canSubmit && <input type="submit" 
-                                    className="profile__edit"
-                                    value="Редактировать"
-                            /> }
-              <button className="profile__logout"
-                      onClick={signOut}>
-                      Выйти из аккаунта
-              </button>
+            </div>      
+          </fieldset>
+          <fieldset className="profile__fieldset">
+            <label htmlFor="email" className="profile__form-label">
+            Email
+            <p className='profile__form-error'>
+            </p> 
+            </label>
+            <div className="profile__form-input-group">
+              <input id="email"  
+                    name="email" 
+                    type="email"
+                    className="profile__form-input"
+                    placeholder='Ваш Email'
+                    pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
+                    required 
+                    onChange={onChange}
+                    ref={inputEmail}
+                  />
+              <p className='profile__form-error'>
+              В почте должен быть @ и имя домена с точкой
+              </p> 
             </div>
-          </form>
-        </main>
-      </div>
-    </>
+          </fieldset>
+          <div className="profile__buttons">
+            {isTooltipShown && <p className='profile__tooltip'>{message}</p>}      
+            {canSubmit && <input type="submit" 
+                                  className="profile__edit"
+                                  value="Редактировать"
+                          /> }
+            <button className="profile__logout"
+                    onClick={signOut}>
+                    Выйти из аккаунта
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
   );
 }
     

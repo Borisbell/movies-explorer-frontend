@@ -8,6 +8,7 @@ import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Preloader from '../Preloader/Preloader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as api from '../../utils/MainApi';
 import { getBeatFilmMovies } from '../../utils/MoviesApi';
@@ -18,6 +19,7 @@ function App() {
   const [userData, setUserData] = useState({});
   const [moviesDB, setMoviesDB] = useState([]);
   const [moviesFromMyServer, setMoviesFromMyServer] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   
@@ -27,6 +29,7 @@ function App() {
         if (data.token) {
           localStorage.setItem('jwt', data.token);
           tokenCheck();
+          navigate('/movies');
         }
       })
   }
@@ -35,7 +38,7 @@ function App() {
     return api.register(name, email, password)
     .then(() => {
       handleLogin({ email, password });
-      navigate('/movies');
+      navigate('/movies'); //лишнее?
     });
   }
 
@@ -45,7 +48,9 @@ function App() {
       api.getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
-          setUserData(res);
+          setUserData((prev) => res);
+          localStorage.setItem('userData', JSON.stringify(res));
+          return res;
         })
         .catch(err => {
           console.log('Ошибка: ', err)
@@ -73,25 +78,26 @@ function App() {
     card.isSaved = true;
     const { created_at, id, updated_at, ...newCard } = card;
     newCard.owner = userData._id;
-    console.log('Edited card ', newCard)
+    console.log('Edited card ', newCard);
 
     const updatedMovieDB = moviesDB.map(movie => {
-      if(movie.id === card.id){
+      if(movie.movieId === card.movieId){
         return {...movie, isSaved:true };
       }
       return movie;
     })
 
-    setMoviesDB(updatedMovieDB);
-
     addMovie(newCard, token)
       .then(newMovie => {
         newMovie.isSaved = true;
-        setMoviesFromMyServer(prev => [...moviesFromMyServer, newMovie]);
+        setMoviesFromMyServer((prev) => [...moviesFromMyServer, newMovie]);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       })
+
+    setMoviesDB((prev) => updatedMovieDB);
+    console.log('moviesDB after saving movie ', updatedMovieDB);
   }  
 
   const handleDeleteMovie = (card, token) => {
@@ -123,9 +129,8 @@ function App() {
       if (obj.id === card.movieId) {
         return {...obj, isSaved: false};
       }
-      return obj;
-      }
-      )
+        return obj;
+      })
     );
 
     const cardId = moviesFromMyServer.find(movie => movie.movieId === card.id);
@@ -144,18 +149,19 @@ function App() {
   function filterMyMovies(value) {
     return value.owner === userData._id
   }
+  
+  useEffect(() => {
+    tokenCheck();
+  },[]);
 
   useEffect(() => {
     Promise.all([getMyMovies(token), 
-                 getBeatFilmMovies(), 
-                 tokenCheck()
+                 getBeatFilmMovies(),
                 ])
       .then(([myMovies, 
-              beatMovies, 
-              userData
-            ]) => {
-        const myFilteredMovies = myMovies.filter(filterMyMovies)
-        setMoviesFromMyServer(myFilteredMovies);
+              beatMovies,
+            ]) => {     
+        const myFilteredMovies = myMovies.filter(filterMyMovies);
         const updatedArray = beatMovies.map(
           (movie) => ({
             ...movie,
@@ -165,27 +171,40 @@ function App() {
             isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
           })
         )
-        setMoviesDB(updatedArray);
+        return [myFilteredMovies, updatedArray]
+      })
+      .then(([myFilteredMovies, 
+        updatedArray, 
+      ]) => {
+        setMoviesFromMyServer((prev) => myFilteredMovies);
+        setMoviesDB((prev) => updatedArray);
+        setIsLoading(false);
       })
       .catch(err => {
         console.log('Ошибка: ', err)
       });
   },[loggedIn]);
 
+  if(isLoading){
+    return ( <Preloader />)
+  }
+
   return (
     <CurrentUserContext.Provider value={{userData, setUserData}}>
       <Routes>
         <Route path="/" element={<Main loggedIn={loggedIn}/>} />
-        <Route path="signin" element={
-          <Login
-            handleLogin={handleLogin} 
-          />} />
-        <Route path="signup" 
-               element={<Register 
-               handleRegister={handleRegister}
-               handleLogin={handleLogin}  
-               />} 
-          />
+        <Route element={<ProtectedRoute loggedIn={!loggedIn} />}>
+          <Route path="signin" element={
+            <Login
+              handleLogin={handleLogin} 
+            />} />
+          <Route path="signup" 
+                element={<Register 
+                handleRegister={handleRegister}
+                handleLogin={handleLogin}  
+                />} 
+            />
+        </Route>
         <Route element={<ProtectedRoute loggedIn={localStorage.getItem('jwt')} />}>
             <Route path="saved-movies" element={ 
               <SavedMovies 
