@@ -27,9 +27,13 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
     if(isShort){
       searchResult = searchResult.filter(shortMovies);
     }
+
+    console.log('searchResult ', searchResult);
     setCards(cards => searchResult);
     window.localStorage.setItem('moviesSearchque', JSON.stringify(searchQue));
     window.localStorage.setItem('moviesSearchIsShort', JSON.stringify(isShort));
+    if(searchResult.length > 0){
+      window.localStorage.setItem('moviesSearchCards', JSON.stringify(searchResult));}
   }
 
   const handleShortMoviesChange = () => {
@@ -56,15 +60,16 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
           }
           return obj;
       });
-    setCards((prev) => updatedSavedMoviesArray);
-  }
+      setCards((prev) => updatedSavedMoviesArray);
+      console.log("updatedSavedMoviesArray ", updatedSavedMoviesArray)
+    }
   },[])
 
   useEffect(() => {
     if(cards.length){
     window.localStorage.setItem('moviesSearchCards', JSON.stringify(cards));
     }
-  },[moviesDB])
+  },[cards])
 
   return (
     <div className="movies">

@@ -22,7 +22,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  
   const handleLogin = (email, password) => {
     return api.authorize(email, password)
       .then((data) => {
@@ -88,6 +87,8 @@ function App() {
       return movie;
     })
 
+    setMoviesDB((prev) => updatedMovieDB);
+    
     addMovie(newCard, token)
       .then(newMovie => {
         newMovie.isSaved = true;
@@ -95,9 +96,7 @@ function App() {
       })
       .catch(err => {
         console.log('Ошибка: ', err)
-      })
-
-    setMoviesDB((prev) => updatedMovieDB);
+      })  
     console.log('moviesDB after saving movie ', updatedMovieDB);
   }  
 
@@ -172,11 +171,6 @@ function App() {
             isSaved: myFilteredMovies.some(item => item.movieId === movie.id)
           })
         )
-        return [myFilteredMovies, updatedArray]
-      })
-      .then(([myFilteredMovies, 
-        updatedArray, 
-      ]) => {
         setMoviesFromMyServer((prev) => myFilteredMovies);
         setMoviesDB((prev) => updatedArray);
         setIsLoading(false);
@@ -207,6 +201,15 @@ function App() {
             />
         </Route>
         <Route element={<ProtectedRoute loggedIn={localStorage.getItem('jwt')} />}>
+            <Route path="movies" element={ 
+                  <Movies 
+                    moviesDB={moviesDB}
+                    handleSavedMovie={handleSavedMovie}  
+                    handleDeleteMovie={handleDeleteFromMovies}
+                    loggedIn={loggedIn}   
+                  />
+                  }   
+                />
             <Route path="saved-movies" element={ 
               <SavedMovies 
                 userData={userData}
@@ -215,15 +218,6 @@ function App() {
                 moviesFromMyServer={moviesFromMyServer}
                 handleDeleteMovie={handleDeleteMovie}
                 token={token}
-              />
-              }   
-            />
-            <Route path="movies" element={ 
-              <Movies 
-                moviesDB={moviesDB}
-                handleSavedMovie={handleSavedMovie}  
-                handleDeleteMovie={handleDeleteFromMovies}
-                loggedIn={loggedIn}   
               />
               }   
             />
