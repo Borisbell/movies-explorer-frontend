@@ -21,26 +21,27 @@ function Profile({signOut,
   const [isTooltipShown, setIsTooltipShown] = useState(false);
   // const {userData, setUserData} = useContext(CurrentUserContext);
 
-  // console.log('userData: ', userData);
-
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    api.editProfile( values.email, values.name, token)
+    console.log('values.email ', values.email, 'values.name ', values.name, 'token ', token);
+    api.editProfile(values.email, values.name, token)
       .then(res => {
         setCurrentUser(res.data);
         setUserData(res.data);
-        setMessage(`Данные обновлены. Имя: ${res.data.name}, емейл: ${res.data.email}`);
+        setMessage(`Данные обновлены. Имя: ${res.data.name}, Email: ${res.data.email}`);
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
       })
       .catch(err => {
         console.log('Ошибка: ', err);
         setMessage(JSON.stringify(err.message));
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
       })
-    setIsTooltipShown(true);
-    setTimeout(setIsTooltipShown(false), "5000");
   }
 
   useEffect(() => {
@@ -48,10 +49,10 @@ function Profile({signOut,
     inputName.current.value = userData.name;
     inputEmail.current.value = userData.email;
     setValues({
-      name: currentUser.name,
-      email: currentUser.email,
+      name: userData.name,
+      email: userData.email,
     });
-  }, [userData])
+  }, [loggedIn])
 
   useEffect(() => {
     if(values.name !== currentUser.name || values.email !== currentUser.email){
@@ -109,8 +110,8 @@ function Profile({signOut,
               </p> 
             </div>
           </fieldset>
-          <div className="profile__buttons">
-            {isTooltipShown && <p className='profile__tooltip'>{message}</p>}      
+          {isTooltipShown && <div className='profile__tooltip'>{message}</div>} 
+          <div className="profile__buttons">     
             {canSubmit && <input type="submit" 
                                   className="profile__edit"
                                   value="Редактировать"

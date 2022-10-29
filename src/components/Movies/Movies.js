@@ -63,7 +63,7 @@ function Movies({moviesDB, handleSavedMovie, handleDeleteMovie, loggedIn}) {
       setCards((prev) => updatedSavedMoviesArray);
       console.log("updatedSavedMoviesArray ", updatedSavedMoviesArray)
     }
-  },[])
+  },[moviesDB])
 
   useEffect(() => {
     if(cards.length){

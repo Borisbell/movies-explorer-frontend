@@ -104,6 +104,21 @@
   display: block;
 }
 
+.profile__tooltip {
+  padding: 16px;
+  background-color: aliceblue;
+  font-family: var(--font-family);
+  font-style: normal;
+  text-align: right;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #252525;
+  border-radius: 12px;
+  max-width: 360px;
+  margin: 12px auto;
+}
+
 .profile__edit:disabled {
   color: transparent
 }

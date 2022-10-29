@@ -14,15 +14,26 @@ function Register({handleRegister, handleLogin}) {
 
   const [message, setMessage] = useState('');
   const [signupSuccess, setSignupSuccess] = useState(true);
+  const [isTooltipShown, setIsTooltipShown] = useState(false);
 
   const onSubmit = ({ name, email, password }) => {
     handleRegister(name, email, password)
       .then(() => { 
+        setMessage(`Регистрация прошла успешно`);
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
         handleLogin(email, password)
       })
       .catch(err => {
+        console.log('err ', err)
+        if(err === 'Ошибка 409'){
+          setMessage('Этот email уже занят');
+        } else {
+          setMessage(err);
+        }
         setSignupSuccess(false);
-        setMessage(JSON.stringify(err.message));
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
       })
   }
 
@@ -89,6 +100,7 @@ function Register({handleRegister, handleLogin}) {
             <p className='register__form-error'>
               {errors?.password && errors?.password.message}
             </p>  
+            {isTooltipShown && <div className='profile__tooltip'>{message}</div>} 
             <input type="submit" 
                    className="register__form-submit"
                    value="Зарегистрироваться"

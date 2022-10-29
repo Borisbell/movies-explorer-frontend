@@ -57,6 +57,7 @@ function App() {
       } else {
         console.log('jwt not found in localstorage');
         setIsLoading(false);
+        signOut();
       }
     }
 
