@@ -1,0 +1,10 @@
+.delete-badge {
+  position: absolute;
+  top:14px;
+  right: 14px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}

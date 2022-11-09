@@ -1,47 +1,111 @@
+import React, { useState } from 'react';
 import SignupHeader from '../SignupHeader/SignupHeader';
 import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
-function Register() {
+function Register({handleRegister, handleLogin}) {
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit
+  } = useForm({
+    mode: "onChange"
+  })
+
+  const [message, setMessage] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(true);
+  const [isTooltipShown, setIsTooltipShown] = useState(false);
+
+  const onSubmit = ({ name, email, password }) => {
+    handleRegister(name, email, password)
+      .then(() => { 
+        setMessage(`Регистрация прошла успешно`);
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
+        handleLogin(email, password)
+      })
+      .catch(err => {
+        console.log('err ', err)
+        if(err === 'Ошибка 409'){
+          setMessage('Этот email уже занят');
+        } else {
+          setMessage(err);
+        }
+        setSignupSuccess(false);
+        setIsTooltipShown(true);
+        setTimeout(() => setIsTooltipShown(false), "3000");
+      })
+  }
+
   return (
     <div className="register">
       <SignupHeader text="Добро пожаловать!"/>
       <main>
         <form
-          // onSubmit={}
+          onSubmit={handleSubmit(onSubmit)}
           className="register__form">
             <label htmlFor="name" className="register__form-label">Имя</label>
-              <input id="name" 
+            <input id="name" 
                     name="name" 
-                    type="text" 
-                    //  value={} 
-                    //  onChange={} 
+                    type="text"  
                     className="register__form-input"
-                    placeholder="Ваше имя"    
+                    placeholder="Ваше имя"
+                    {...register("name", {
+                    required: "Обязательное поле",
+                    minLength: {
+                      value: 2,
+                      message: 'Минимум 2 символа'
+                    }  
+                    })}
                     required
-                    />
+                  />
+            <p className='register__form-error'>
+              {errors?.name && errors?.name.message}
+            </p>        
             <label htmlFor="email" className="register__form-label">E-mail</label>
             <input id="email" 
                   name="email" 
                   type="email" 
-                  //  value={} 
-                  //  onChange={} 
                   className="register__form-input"
-                  placeholder="Email"    
+                  placeholder="Email"
+                  {...register("email", {
+                    required: "Обязательное поле",
+                    pattern: {
+                      value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      message: 'Email должен содержать символ @'
+                    }
+                  }
+                )}       
                   required
                   />
+            <p className='register__form-error'>
+              {errors?.email && errors?.email.message}
+            </p>       
             <label htmlFor="password" className="register__form-label">Пароль</label>       
             <input id="password"  
                 name="password" 
                 type="password" 
-                // value={} 
-                // onChange={}
                 className="register__form-input"
                 placeholder="Пароль" 
-                required/>
-            <button type="submit" 
-                    className="register__form-submit">
-                    Зарегистрироваться
-            </button>
+                required
+                {...register("password", {
+                    required: "Обязательное поле",
+                    minLength: {
+                      value: 4,
+                      message: 'Минимум 4 символа'
+                    }
+                  })
+                }        
+                />
+            <p className='register__form-error'>
+              {errors?.password && errors?.password.message}
+            </p>  
+            {isTooltipShown && <div className='profile__tooltip'>{message}</div>} 
+            <input type="submit" 
+                   className="register__form-submit"
+                   value="Зарегистрироваться"
+                   disabled={!isValid}
+                    />
           </form>
           <div className="register__signin">
             <p className="register__signin-text">Уже зарегистрированы?</p>

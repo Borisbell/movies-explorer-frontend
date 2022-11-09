@@ -1,16 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import img1 from '../../images/cards/pic__COLOR_pic-1.jpg';
-import img2 from '../../images/cards/pic__COLOR_pic-2.jpg';
-import img3 from '../../images/cards/pic__COLOR_pic.jpg';
 
-function MoviesCardList({placeMovies}) {
+function MoviesCardList({placeMovies, 
+                         cards,
+                         handleSavedMovie,
+                         handleDeleteMovie}) {
+  const [cardsLeft, setCardsLeft] = useState(1);
+  const [sliceEnd, setSliceEnd] = useState(12);
+  const [counter, setCounter] = useState(0);
+
+  const handleLoadMoreMovies = () => {
+    setSliceEnd(sliceEnd + counter);
+    setCardsLeft(cardsLeft - counter);
+    console.log('sliceEnd ', sliceEnd);
+    console.log('counter ', counter);
+    console.log('cardsLeft ', cardsLeft);
+  }
+
+  useEffect(()=>{
+    setCardsLeft(cards.length - sliceEnd);
+  }, [cards.length, sliceEnd])
+
+  useEffect(() => {
+    if(window.innerWidth >= 920){
+      setCounter(3);
+      setSliceEnd(12);
+    } else if (window.innerWidth <= 920 && window.innerWidth > 600){
+      setCounter(2);
+      setSliceEnd(8);
+    } else {
+      setCounter(1);
+      setSliceEnd(5);
+    }
+  }, [])
+
   return (
     <div className='movies-card-list'>
-      <MoviesCard img={img1} isSaved={false} placeMovies={placeMovies}/>
-      <MoviesCard img={img2} isSaved={false} placeMovies={placeMovies}/>
-      <MoviesCard img={img3} isSaved={true} placeMovies={placeMovies}/>
-      <button className='movies-card-list__load-more'>Ещё</button>
+      {cards.slice(0, sliceEnd).map((card) => (
+        <MoviesCard key={card.movieId}
+                    card={card}
+                    img={card.image}
+                    trailerLink={card.trailerLink}
+                    nameRU={card.nameRU}
+                    // imgAlt={card.image.alternativeText} 
+                    duration={card.duration}
+                    isSaved={card.isSaved} 
+                    placeMovies={placeMovies} 
+                    handleSavedMovie={handleSavedMovie}
+                    handleDeleteMovie={handleDeleteMovie}
+                    />
+          ))}
+      {cardsLeft > 0 && <button className='movies-card-list__load-more' onClick={handleLoadMoreMovies}>Ещё</button>}
     </div>
   );
 }

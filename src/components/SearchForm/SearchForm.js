@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Switcher from '../Switcher/Switcher';
 import search from '../../images/search/search.svg';
 
-function SearchForm(props) {
+function SearchForm({handleSearch, handleSearchData, isShort, handleShortMoviesChange, searchQue }) {
   const desktopSwitcher = document.querySelector('.search-form__switcher');
   if(window.innerWidth < 601) {
     desktopSwitcher.remove();
@@ -10,21 +10,23 @@ function SearchForm(props) {
 
   return (
     <div className="search-form__wrapper">
-      <div className="search-form">
+      <form 
+        onSubmit={handleSearchData}
+        className="search-form">
           <div className="search-form__input-group">
             <img src={search} 
                  alt="иконка поиска"
                  className="search-form__icon"
                  />
             <input id="movie" 
-                      name="movie" 
-                      type="text" 
-                      //  value={} 
-                      //  onChange={} 
-                      className="search-form__input"
-                      placeholder="Фильм"    
-                      required
-                      />
+                   name="movie" 
+                   type="text" 
+                   onChange={handleSearch} 
+                   className="search-form__input"
+                   placeholder="Фильм" 
+                   value={searchQue}   
+                   required
+                   />
           </div>
         <div className="search-form__controls">
           <button type="submit" 
@@ -33,10 +35,10 @@ function SearchForm(props) {
           </button>
           <div className="search-form__controls-separator"></div>
         <div className="search-form__switcher">
-          <Switcher />
+          <Switcher isShort={isShort} handleShortMoviesChange={handleShortMoviesChange}/>
         </div>
         </div>
-      </div>
+      </form>
         <div className="search-form__switcher_view_mobile">
           <Switcher />
         </div>
